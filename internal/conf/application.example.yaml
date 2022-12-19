@@ -1,0 +1,14 @@
+postgresql:
+  host: 127.0.0.1
+  port: 5432
+  username: 
+  database: 
+  password: 
+
+mongo:
+  uri: 127.0.0.1:27017
+  database: 
+
+redis:
+  host: 127.0.0.1
+  port: 6379
