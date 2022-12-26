@@ -31,7 +31,7 @@ func (l *ListOption) Validate() []error {
 }
 
 const (
-	defaultPageSize = 50
+	defaultPageSize = 10
 	defaultPage     = 1
 	defaultOrder    = ""
 )
