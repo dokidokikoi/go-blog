@@ -1,13 +1,14 @@
 package user
 
 import (
-	"go-blog/internal/db/model"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // 用户
 type User struct {
-	Id         uint      `json:"id" gorm:"primarykey"`
+	gorm.Model
 	Account    string    `json:"account" gorm:"unique"`
 	Avatar     string    `json:"avatar"`
 	Email      string    `json:"email" gorm:"unique"`
@@ -15,5 +16,12 @@ type User struct {
 	Password   string    `json:"password,omitempty"`
 	StatusCode int       `json:"status_code"`
 	LastLogin  time.Time `json:"last_login"`
-	model.Model
+	RoleID     uint      `json:"role_id"`
+	Role       uint      `json:"role" gorm:"foreignKey:RoleID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+}
+
+// 角色
+type Role struct {
+	gorm.Model
+	RoleName string `json:"role_name" gorm:"uniqueIndex:uni_role_name"`
 }

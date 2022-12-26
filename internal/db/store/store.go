@@ -3,6 +3,13 @@ package store
 import "fmt"
 
 type Factory interface {
+	Transaction() Transaction
+	Article() Article
+	ArticleBody() ArticleBody
+	ArticleCategory() ArticleCategory
+	ArticleTag() ArticleTag
+	ArticleSeries() ArticleSeries
+	ArticleArticleTag() ArticleArticleTag
 }
 
 var storePointer Factory

@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"go-blog/internal/config"
-	"go-blog/internal/db/model/tag"
-	"go-blog/internal/db/model/todo"
+	"go-blog/internal/db/model/article"
+	"go-blog/internal/db/model/list"
 	"go-blog/internal/db/model/user"
 	"go-blog/pkg/db"
 
@@ -15,6 +15,34 @@ import (
 
 type Store struct {
 	db *gorm.DB
+}
+
+func (d *Store) Transaction() *transaction {
+	return newTransaction(d)
+}
+
+func (d *Store) Articles() *articles {
+	return newArticles(d)
+}
+
+func (d *Store) ArticleBodys() *articleBodys {
+	return newArticleBodys(d)
+}
+
+func (d *Store) ArticleTags() *articleTags {
+	return newArticleTags(d)
+}
+
+func (d *Store) ArticleCategories() *articleCategories {
+	return newArticleCategories(d)
+}
+
+func (d *Store) ArticleSeries() *articleSeries {
+	return newArticleSeries(d)
+}
+
+func (d *Store) ArticleArticleTag() *articleArticleTags {
+	return newArticleArticleTags(d)
 }
 
 type pgOptions struct {
@@ -43,7 +71,7 @@ func GetPGFactory() (*Store, error) {
 		return nil, fmt.Errorf("failed to get postgresql store factory, pgFactory: %+v, error: %w", pgFactory, err)
 	}
 	// 自动化迁移
-	if err := migrateDatabase(dbIns); err != nil {
+	if err := resetDatabase(dbIns); err != nil {
 		fmt.Println(err)
 	}
 
@@ -55,6 +83,27 @@ func cleanDatabase(db *gorm.DB) error {
 	if err := db.Migrator().DropTable(&user.User{}); err != nil {
 		return errors.Wrap(err, "drop user table failed")
 	}
+	if err := db.Migrator().DropTable(&article.Article{}); err != nil {
+		return errors.Wrap(err, "drop article model failed")
+	}
+	if err := db.Migrator().DropTable(&article.ArticleBody{}); err != nil {
+		return errors.Wrap(err, "drop articleBody model failed")
+	}
+	if err := db.Migrator().DropTable(&article.Tag{}); err != nil {
+		return errors.Wrap(err, "drop article tag model failed")
+	}
+	if err := db.Migrator().DropTable(&article.Category{}); err != nil {
+		return errors.Wrap(err, "drop article category model failed")
+	}
+	if err := db.Migrator().DropTable(&article.Series{}); err != nil {
+		return errors.Wrap(err, "drop article series model failed")
+	}
+	if err := db.Migrator().DropTable(&article.ArticleTag{}); err != nil {
+		return errors.Wrap(err, "drop article article_tag model failed")
+	}
+	if err := db.Migrator().DropTable(&list.Category{}); err != nil {
+		return errors.Wrap(err, "drop list category model failed")
+	}
 
 	return nil
 }
@@ -64,11 +113,26 @@ func migrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&user.User{}); err != nil {
 		return errors.Wrap(err, "migrate user model failed")
 	}
-	if err := db.AutoMigrate(&todo.Todo{}); err != nil {
-		return errors.Wrap(err, "migrate user model failed")
+	if err := db.AutoMigrate(&article.Tag{}); err != nil {
+		return errors.Wrap(err, "migrate article tag model failed")
 	}
-	if err := db.AutoMigrate(&tag.Tag{}); err != nil {
-		return errors.Wrap(err, "migrate user model failed")
+	if err := db.AutoMigrate(&article.Category{}); err != nil {
+		return errors.Wrap(err, "migrate article category model failed")
+	}
+	if err := db.AutoMigrate(&article.ArticleBody{}); err != nil {
+		return errors.Wrap(err, "migrate articleBody model failed")
+	}
+	if err := db.AutoMigrate(&article.Series{}); err != nil {
+		return errors.Wrap(err, "migrate article series model failed")
+	}
+	if err := db.AutoMigrate(&article.Article{}); err != nil {
+		return errors.Wrap(err, "migrate article model failed")
+	}
+	if err := db.AutoMigrate(&article.ArticleTag{}); err != nil {
+		return errors.Wrap(err, "migrate article article_tag model failed")
+	}
+	if err := db.AutoMigrate(&list.Category{}); err != nil {
+		return errors.Wrap(err, "migrate list category model failed")
 	}
 
 	return nil
