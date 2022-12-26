@@ -10,4 +10,8 @@ func InstallAll(e *gin.Engine) {
 	e.GET("/test", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, struct{ Msg string }{Msg: "hello"})
 	})
+
+	InstallArticle(e)
+
+	InstallArticleIam(e)
 }
