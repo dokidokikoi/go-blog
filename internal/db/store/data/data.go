@@ -31,7 +31,7 @@ func (d *dataCenter) ArticleBody() store.ArticleBody {
 	return newArticleBodys(d)
 }
 
-func (d *dataCenter) ArticleCategory() store.ArticleCategory {
+func (d *dataCenter) Category() store.Category {
 	return newArticleCategories(d)
 }
 
@@ -45,6 +45,14 @@ func (d *dataCenter) ArticleSeries() store.ArticleSeries {
 
 func (d *dataCenter) ArticleArticleTag() store.ArticleArticleTag {
 	return newArticleArticleTag(d)
+}
+
+func (d *dataCenter) Users() store.Users {
+	return newUsers(d)
+}
+
+func (d *dataCenter) Roles() store.Roles {
+	return newRoles(d)
 }
 
 func GetStoreDBFactory() (store.Factory, error) {

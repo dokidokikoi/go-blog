@@ -1,9 +1,8 @@
-package article
+package role
 
 import (
 	"go-blog/internal/code"
 	"go-blog/internal/core"
-	"go-blog/internal/db/model/category"
 	myErrors "go-blog/internal/errors"
 	"go-blog/pkg/log/zap"
 	"go-blog/pkg/query"
@@ -30,21 +29,10 @@ func (c *Controller) List(ctx *gin.Context) {
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
 		return
 	}
-	option := pageQuery.GetListOption()
-	// category := &article.Category{}
-	// tag := &article.Tag{}
-	// series := &article.Series{}
-	option.Preload = append(
-		option.Preload,
-		[]interface{}{"Category", "type = ?", category.ARTICLE},
-		[]interface{}{"Tags"},
-		[]interface{}{"Series"},
-		[]interface{}{"Author"},
-		[]interface{}{"ArticleBody"})
 
-	res, total, err := c.srv.Article().List(ctx, q.Keyword, option)
+	res, total, err := c.srv.Role().List(ctx, q.Keyword, pageQuery.GetListOption())
 	if err != nil {
-		core.WriteResponse(ctx, myErrors.ClientFailed("文章未找到", code.ErrArticleNotFound), nil)
+		core.WriteResponse(ctx, myErrors.ClientFailed("角色未找到", code.ErrRoleNotFound), nil)
 		return
 	}
 

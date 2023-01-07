@@ -10,6 +10,7 @@ import (
 type SeriesSrv interface {
 	Create(ctx context.Context, a *article.Series) error
 	IsExist(ctx context.Context, a *article.Series) (bool, error)
+	Update(ctx context.Context, a *article.Series) error
 }
 
 type seriesSrv struct {
@@ -23,9 +24,17 @@ func (s seriesSrv) Create(ctx context.Context, a *article.Series) error {
 
 func (s seriesSrv) IsExist(ctx context.Context, a *article.Series) (bool, error) {
 	if a.ID == 0 {
-		return false, nil
+		series, err := s.store.ArticleSeries().Get(ctx, a, nil)
+		if err != nil {
+			return false, err
+		}
+		if series == nil {
+			return false, nil
+		}
+		a.ID = series.ID
+		return true, nil
 	}
-	series, err := s.store.ArticleSeries().Get(ctx, a, &meta.GetOption{Include: []string{"id"}})
+	series, err := s.store.ArticleSeries().Get(ctx, &article.Series{ID: a.ID}, &meta.GetOption{Include: []string{"id"}})
 	if err != nil {
 		return false, err
 	}
@@ -33,6 +42,10 @@ func (s seriesSrv) IsExist(ctx context.Context, a *article.Series) (bool, error)
 		return false, err
 	}
 	return true, nil
+}
+
+func (s seriesSrv) Update(ctx context.Context, a *article.Series) error {
+	return s.store.ArticleSeries().Update(ctx, a, nil)
 }
 
 func NewSeriesSrv(store store.Factory) SeriesSrv {

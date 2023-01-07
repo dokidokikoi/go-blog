@@ -1,17 +1,15 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
-func InstallAll(e *gin.Engine) {
-	e.GET("/test", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, struct{ Msg string }{Msg: "hello"})
-	})
+func InstallAll(r *gin.Engine) {
+	installArticle(r)
+	installUser(r)
+	installCategory(r)
 
-	InstallArticle(e)
-
-	InstallArticleIam(e)
+	installArticleIam(r)
+	installUserIam(r)
+	installcategoryIam(r)
 }

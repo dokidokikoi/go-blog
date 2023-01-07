@@ -54,7 +54,7 @@ func CommonDealList(db *gorm.DB, example interface{}, option *meta.ListOption) (
 	if option != nil && option.Validate() != nil {
 		if option.Preload != nil {
 			for _, s := range option.Preload {
-				db = db.Preload(s)
+				db = db.Preload(fmt.Sprintf("%s", s[0]), s[1:]...)
 			}
 		}
 		for _, join := range option.Join {

@@ -14,6 +14,7 @@ var (
 )
 
 var (
-	ApiErrValidation = ClientFailed(ErrValidation.Error(), code.ErrBind)
-	ApiErrDatabase   = ServerFailed(ErrDatabaseOp.Error(), code.ErrDatabase)
+	ApiErrValidation  = ClientFailed(ErrValidation.Error(), code.ErrBind)
+	ApiErrDatabase    = ServerFailed(ErrDatabaseOp.Error(), code.ErrDatabase)
+	ApiRecordNotFound = ServerFailed(RecordNotFound.Error(), code.ErrRecordNotFound)
 )

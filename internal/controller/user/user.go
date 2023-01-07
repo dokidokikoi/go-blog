@@ -1,4 +1,4 @@
-package article
+package user
 
 import (
 	"go-blog/internal/db/store"

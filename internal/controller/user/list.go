@@ -1,9 +1,8 @@
-package article
+package user
 
 import (
 	"go-blog/internal/code"
 	"go-blog/internal/core"
-	"go-blog/internal/db/model/category"
 	myErrors "go-blog/internal/errors"
 	"go-blog/pkg/log/zap"
 	"go-blog/pkg/query"
@@ -31,20 +30,11 @@ func (c *Controller) List(ctx *gin.Context) {
 		return
 	}
 	option := pageQuery.GetListOption()
-	// category := &article.Category{}
-	// tag := &article.Tag{}
-	// series := &article.Series{}
-	option.Preload = append(
-		option.Preload,
-		[]interface{}{"Category", "type = ?", category.ARTICLE},
-		[]interface{}{"Tags"},
-		[]interface{}{"Series"},
-		[]interface{}{"Author"},
-		[]interface{}{"ArticleBody"})
+	option.GetOption.Preload = append(option.GetOption.Preload, []interface{}{"Role"})
 
-	res, total, err := c.srv.Article().List(ctx, q.Keyword, option)
+	res, total, err := c.srv.User().List(ctx, q.Keyword, option)
 	if err != nil {
-		core.WriteResponse(ctx, myErrors.ClientFailed("文章未找到", code.ErrArticleNotFound), nil)
+		core.WriteResponse(ctx, myErrors.ClientFailed("用户未找到", code.ErrUserNotFound), nil)
 		return
 	}
 

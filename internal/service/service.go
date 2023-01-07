@@ -3,14 +3,19 @@ package service
 import (
 	"go-blog/internal/db/store"
 	"go-blog/internal/service/article"
+	"go-blog/internal/service/category"
+	"go-blog/internal/service/user"
 	"sync"
 )
 
 type Service interface {
 	Article() article.ArticleSrv
 	ArticleTag() article.TagSrv
-	ArticleCategory() article.CategorySrv
+	Category() category.CategorySrv
 	ArticleSeries() article.SeriesSrv
+
+	User() user.UserSrv
+	Role() user.RoleSrv
 }
 
 type service struct {
@@ -30,12 +35,20 @@ func (s service) ArticleTag() article.TagSrv {
 	return article.NewTagSrv(s.store)
 }
 
-func (s service) ArticleCategory() article.CategorySrv {
-	return article.NewCategorySrv(s.store)
+func (s service) Category() category.CategorySrv {
+	return category.NewCategorySrv(s.store)
 }
 
 func (s service) ArticleSeries() article.SeriesSrv {
 	return article.NewSeriesSrv(s.store)
+}
+
+func (s service) User() user.UserSrv {
+	return user.NewUserSrv(s.store)
+}
+
+func (s service) Role() user.RoleSrv {
+	return user.NewRoleSrv(s.store)
 }
 
 func NewService(store store.Factory) Service {

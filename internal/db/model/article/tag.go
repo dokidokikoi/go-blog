@@ -14,7 +14,7 @@ func (tag *Tag) TableName() string {
 
 // 文章_标签中间表
 type ArticleTag struct {
-	ArticleId uint      `json:"article_id" gorm:"uniqueIndex:uni_article_tag"`
+	ArticleID uint      `json:"article_id" gorm:"uniqueIndex:uni_article_tag"`
 	TagId     uint      `json:"tag_id" gorm:"uniqueIndex:uni_article_tag"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

@@ -13,11 +13,11 @@ type User struct {
 	Avatar     string    `json:"avatar"`
 	Email      string    `json:"email" gorm:"unique"`
 	NickName   string    `json:"nick_name"`
-	Password   string    `json:"password,omitempty"`
-	StatusCode int       `json:"status_code"`
+	Password   string    `json:"-"`
+	StatusCode int       `json:"status_code" gorm:"fefault:0"`
 	LastLogin  time.Time `json:"last_login"`
 	RoleID     uint      `json:"role_id"`
-	Role       uint      `json:"role" gorm:"foreignKey:RoleID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Role       Role      `json:"role" gorm:"foreignKey:RoleID"`
 }
 
 // 角色

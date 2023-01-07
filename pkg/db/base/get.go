@@ -3,6 +3,7 @@ package base
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	myErrors "go-blog/internal/errors"
 	meta "go-blog/pkg/meta/option"
@@ -16,7 +17,7 @@ func (p *PgModel[T]) Get(ctx context.Context, t *T, option *meta.GetOption) (*T,
 	var err error
 	if option != nil {
 		for _, s := range option.Preload {
-			db = db.Preload(s)
+			db = db.Preload(fmt.Sprintf("%s", s[0]), s[1:]...)
 		}
 		if option.Include != nil {
 			db = db.Where(t, option.Include)

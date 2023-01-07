@@ -7,20 +7,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InstallArticle(e *gin.Engine) {
+func installArticle(e *gin.Engine) {
 	storeFactory, _ := store.GetStoreFactory()
 	articlesController := article.NewController(storeFactory)
 	articlesR := e.Group("/articles")
 	{
 		articlesR.GET("", articlesController.List)
+		articlesR.GET("/:id", articlesController.Get)
 	}
 }
 
-func InstallArticleIam(e *gin.Engine) {
+func installArticleIam(e *gin.Engine) {
 	storeFactory, _ := store.GetStoreFactory()
 	articlesController := article.NewController(storeFactory)
 	articlesR := e.Group("/articles")
 	{
 		articlesR.POST("", articlesController.Create)
+		articlesR.PATCH("", articlesController.Update)
+		articlesR.DELETE("/:id", articlesController.Delete)
 	}
 }

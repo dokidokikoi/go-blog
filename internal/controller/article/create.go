@@ -3,42 +3,12 @@ package article
 import (
 	"go-blog/internal/core"
 	"go-blog/internal/db/model/article"
+	"go-blog/internal/db/model/category"
 	myErrors "go-blog/internal/errors"
 	"go-blog/pkg/log/zap"
 
 	"github.com/gin-gonic/gin"
 )
-
-type ArticleCreate struct {
-	Title       string           `json:"title" binding:"required,min=2"`
-	Summary     string           `json:"summary"`
-	Cover       string           `json:"cover" binding:"required"`
-	Category    article.Category `json:"category" binding:"required"`
-	Tags        []article.Tag    `json:"tags"`
-	Series      article.Series   `json:"series"`
-	ArticleBody ArticleBody      `json:"article_body"`
-}
-
-type ArticleBody struct {
-	Content string `json:"content" binding:"required"`
-}
-
-// type ArticleTag struct {
-// 	Id      uint   `json:"id"`
-// 	TagName string `json:"tag_name"`
-// }
-
-// type ArticleCategoty struct {
-// 	Id           uint   `json:"id"`
-// 	CategoryName string `json:"category_name"`
-// 	Summary      string `json:"summary"`
-// }
-
-// type ArticleSeries struct {
-// 	Id         uint   `json:"id"`
-// 	SeriesName string `json:"series_name"`
-// 	Summary    string `json:"summary"`
-// }
 
 func (c *Controller) Create(ctx *gin.Context) {
 	var a ArticleCreate
@@ -57,14 +27,15 @@ func (c *Controller) Create(ctx *gin.Context) {
 		return
 	}
 
-	tartgetCategory := &article.Category{
+	tartgetCategory := &category.Category{
 		ID:           a.Category.ID,
 		CategoryName: a.Category.CategoryName,
 		Summary:      a.Summary,
+		Type:         category.ARTICLE,
 	}
-	ok, err := c.srv.ArticleCategory().IsExist(ctx, tartgetCategory)
+	ok, err := c.srv.Category().IsExist(ctx, tartgetCategory)
 	if err != nil || !ok {
-		c.srv.ArticleCategory().Create(ctx, tartgetCategory)
+		c.srv.Category().Create(ctx, tartgetCategory)
 	}
 
 	targetSeries := &article.Series{
@@ -84,6 +55,7 @@ func (c *Controller) Create(ctx *gin.Context) {
 		CategoryID:    tartgetCategory.ID,
 		SeriesID:      targetSeries.ID,
 		ArticleBodyID: targetArticleBody.ID,
+		AuthorID:      2, // TODO 暂时写死
 	}
 	if err = c.srv.Article().CreateArticle(ctx, targetArtcle); err != nil {
 		core.WriteResponse(ctx, myErrors.ApiErrDatabase, nil)
@@ -100,7 +72,7 @@ func (c *Controller) Create(ctx *gin.Context) {
 		if err != nil || !ok {
 			c.srv.ArticleTag().Create(ctx, targetTag)
 		}
-		targetArticleTag = append(targetArticleTag, &article.ArticleTag{ArticleId: targetArtcle.ID, TagId: targetTag.ID})
+		targetArticleTag = append(targetArticleTag, &article.ArticleTag{ArticleID: targetArtcle.ID, TagId: targetTag.ID})
 	}
 
 	errs := c.srv.ArticleTag().CreateArticleTagCollection(ctx, targetArticleTag)

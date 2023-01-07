@@ -8,7 +8,7 @@ import (
 
 func (p *PgModel[T]) Delete(ctx context.Context, t *T, option *meta.DeleteOption) error {
 	var example T
-	err := p.DB.Where(t).Delete(example).Error
+	err := p.DB.Where(t).Delete(&example).Error
 	return err
 }
 
@@ -16,7 +16,7 @@ func (p *PgModel[T]) DeleteCollection(ctx context.Context, t []*T, option *meta.
 	var errors []error
 	var example T
 	for _, entity := range t {
-		if e := p.DB.Where(entity).Delete(example).Error; e != nil {
+		if e := p.DB.Where(entity).Delete(&example).Error; e != nil {
 			errors = append(errors, e)
 		}
 	}

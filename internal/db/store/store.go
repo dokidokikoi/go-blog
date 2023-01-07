@@ -6,10 +6,13 @@ type Factory interface {
 	Transaction() Transaction
 	Article() Article
 	ArticleBody() ArticleBody
-	ArticleCategory() ArticleCategory
+	Category() Category
 	ArticleTag() ArticleTag
 	ArticleSeries() ArticleSeries
 	ArticleArticleTag() ArticleArticleTag
+
+	Users() Users
+	Roles() Roles
 }
 
 var storePointer Factory

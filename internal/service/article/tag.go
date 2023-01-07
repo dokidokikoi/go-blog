@@ -13,6 +13,8 @@ type TagSrv interface {
 
 	CreateArticleTag(ctx context.Context, a *article.ArticleTag) error
 	CreateArticleTagCollection(ctx context.Context, as []*article.ArticleTag) []error
+	UpdateArticleTag(ctx context.Context, a *article.Article) []error
+	DeleteArticleTag(ctx context.Context, a *article.ArticleTag) error
 }
 
 type tagSrv struct {
@@ -26,9 +28,17 @@ func (t tagSrv) Create(ctx context.Context, a *article.Tag) error {
 
 func (t tagSrv) IsExist(ctx context.Context, a *article.Tag) (bool, error) {
 	if a.ID == 0 {
-		return false, nil
+		tag, err := t.store.ArticleTag().Get(ctx, a, nil)
+		if err != nil {
+			return false, err
+		}
+		if tag == nil {
+			return false, nil
+		}
+		a.ID = tag.ID
+		return true, nil
 	}
-	tag, err := t.store.ArticleTag().Get(ctx, a, &meta.GetOption{Include: []string{"id"}})
+	tag, err := t.store.ArticleTag().Get(ctx, &article.Tag{ID: a.ID}, &meta.GetOption{Include: []string{"id"}})
 	if err != nil {
 		return false, err
 	}
@@ -44,6 +54,46 @@ func (t tagSrv) CreateArticleTag(ctx context.Context, a *article.ArticleTag) err
 
 func (t tagSrv) CreateArticleTagCollection(ctx context.Context, as []*article.ArticleTag) []error {
 	return t.store.ArticleArticleTag().CreateCollection(ctx, as, nil)
+}
+
+func (t tagSrv) UpdateArticleTag(ctx context.Context, a *article.Article) []error {
+	store := t.store.Transaction().TransactionBegin()
+	var errs []error
+	var targetArticleTag []*article.ArticleTag
+	for _, tag := range a.Tags {
+		targetTag := &article.Tag{
+			ID:      tag.ID,
+			TagName: tag.TagName,
+		}
+		ok, err := t.IsExist(ctx, targetTag)
+		if err != nil || !ok {
+			t.Create(ctx, targetTag)
+		}
+		targetArticleTag = append(targetArticleTag, &article.ArticleTag{ArticleID: a.ID, TagId: targetTag.ID})
+	}
+
+	if err := t.DeleteArticleTag(ctx, &article.ArticleTag{ArticleID: a.ID}); err != nil {
+		store.Transaction().TransactionRollback()
+		errs = append(errs, err)
+		return errs
+	}
+
+	if errs = t.CreateArticleTagCollection(ctx, targetArticleTag); errs != nil {
+		for _, err := range errs {
+			if err != nil {
+				store.Transaction().TransactionRollback()
+				return errs
+			}
+		}
+	}
+
+	store.Transaction().TransactionCommit()
+
+	return errs
+}
+
+func (t tagSrv) DeleteArticleTag(ctx context.Context, a *article.ArticleTag) error {
+	return t.store.ArticleArticleTag().Delete(ctx, a, nil)
 }
 
 func NewTagSrv(store store.Factory) TagSrv {
