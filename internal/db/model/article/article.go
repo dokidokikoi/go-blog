@@ -2,6 +2,8 @@ package article
 
 import (
 	"go-blog/internal/db/model/category"
+	"go-blog/internal/db/model/series"
+	"go-blog/internal/db/model/tag"
 	"go-blog/internal/db/model/user"
 
 	"gorm.io/gorm"
@@ -20,9 +22,9 @@ type Article struct {
 	StatusCode    int               `json:"status_code,omitempty" gorm:"default:0"`
 	CategoryID    uint              `json:"category_id"`
 	Category      category.Category `json:"category" gorm:"foreignKey:CategoryID"`
-	Tags          []Tag             `json:"tags" gorm:"many2many:article_article_tag"` //多对多关系.
+	Tags          []tag.Tag         `json:"tags" gorm:"many2many:article_tag"` //多对多关系.
 	SeriesID      uint              `json:"series_id"`
-	Series        Series            `json:"series" gorm:"foreignKey:SeriesID"`
+	Series        series.Series     `json:"series" gorm:"foreignKey:SeriesID"`
 	AuthorID      uint              `json:"author_id"`
 	Author        user.User         `json:"author" gorm:"foreignKey:AuthorID"`
 	ArticleBody   ArticleBody       `json:"article_body" gorm:"foreignKey:ArticleBodyID"`
@@ -31,4 +33,16 @@ type Article struct {
 type ArticleBody struct {
 	ID      uint   `json:"id" gorm:"primarykey" form:"id"`
 	Content string `json:"content" gorm:"type:text"`
+}
+
+// 文章_标签中间表
+type ArticleTag struct {
+	ArticleID uint `json:"article_id" gorm:"uniqueIndex:uni_article_tag"`
+	TagID     uint `json:"tag_id" gorm:"uniqueIndex:uni_article_tag"`
+	// CreatedAt time.Time `json:"created_at"`
+	// UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (articleTag *ArticleTag) TableName() string {
+	return "article_tag"
 }

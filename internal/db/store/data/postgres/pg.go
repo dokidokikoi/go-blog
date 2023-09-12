@@ -2,12 +2,16 @@ package postgres
 
 import (
 	"fmt"
+	"github.com/dokidokikoi/go-common/db"
 
 	"go-blog/internal/config"
 	"go-blog/internal/db/model/article"
 	"go-blog/internal/db/model/category"
+	"go-blog/internal/db/model/list"
+	"go-blog/internal/db/model/series"
+	"go-blog/internal/db/model/site"
+	"go-blog/internal/db/model/tag"
 	"go-blog/internal/db/model/user"
-	"go-blog/pkg/db"
 
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
@@ -29,20 +33,20 @@ func (d *Store) ArticleBodys() *articleBodys {
 	return newArticleBodys(d)
 }
 
-func (d *Store) ArticleTags() *articleTags {
-	return newArticleTags(d)
+func (d *Store) Tags() *tags {
+	return newTags(d)
 }
 
 func (d *Store) Categories() *categories {
-	return newArticleCategories(d)
+	return newCategories(d)
 }
 
-func (d *Store) ArticleSeries() *articleSeries {
-	return newArticleSeries(d)
+func (d *Store) Series() *articleSeries {
+	return newSeries(d)
 }
 
-func (d *Store) ArticleArticleTag() *articleArticleTags {
-	return newArticleArticleTags(d)
+func (d *Store) ArticleTag() *articleTags {
+	return newArticleTags(d)
 }
 
 func (d *Store) Users() *users {
@@ -79,7 +83,7 @@ func GetPGFactory() (*Store, error) {
 		return nil, fmt.Errorf("failed to get postgresql store factory, pgFactory: %+v, error: %w", pgFactory, err)
 	}
 	// 自动化迁移
-	if err := migrateDatabase(dbIns); err != nil {
+	if err := resetDatabase(dbIns); err != nil {
 		fmt.Println(err)
 	}
 
@@ -127,7 +131,7 @@ func migrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&user.User{}); err != nil {
 		return errors.Wrap(err, "migrate user model failed")
 	}
-	if err := db.AutoMigrate(&article.Tag{}); err != nil {
+	if err := db.AutoMigrate(&tag.Tag{}); err != nil {
 		return errors.Wrap(err, "migrate article tag model failed")
 	}
 	if err := db.AutoMigrate(&category.Category{}); err != nil {
@@ -136,14 +140,20 @@ func migrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&article.ArticleBody{}); err != nil {
 		return errors.Wrap(err, "migrate articleBody model failed")
 	}
-	if err := db.AutoMigrate(&article.Series{}); err != nil {
+	if err := db.AutoMigrate(&series.Series{}); err != nil {
 		return errors.Wrap(err, "migrate article series model failed")
 	}
 	if err := db.AutoMigrate(&article.Article{}); err != nil {
 		return errors.Wrap(err, "migrate article model failed")
 	}
-	if err := db.AutoMigrate(&article.ArticleTag{}); err != nil {
-		return errors.Wrap(err, "migrate article article_tag model failed")
+	// if err := db.AutoMigrate(&article.ArticleTag{}); err != nil {
+	// 	return errors.Wrap(err, "migrate article article_tag model failed")
+	// }
+	if err := db.AutoMigrate(&site.Site{}); err != nil {
+		return errors.Wrap(err, "migrate article sites model failed")
+	}
+	if err := db.AutoMigrate(&list.Item{}); err != nil {
+		return errors.Wrap(err, "migrate article items model failed")
 	}
 
 	return nil

@@ -1,8 +1,8 @@
 package store
 
 import (
+	"github.com/dokidokikoi/go-common/db/base"
 	"go-blog/internal/db/model/article"
-	"go-blog/pkg/db/base"
 )
 
 type ArticleBody interface {

@@ -1,9 +1,8 @@
 package category
 
 const (
-	ARTICLE = 1
-	LIST    = 2
-	SITE    = 3
+	CATE_TYPE_ARTICLE = 1
+	CATE_TYPE_SITE    = 2
 )
 
 // 文章分类

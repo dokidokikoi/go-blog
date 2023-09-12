@@ -1,14 +1,14 @@
 package postgres
 
 import (
+	db "github.com/dokidokikoi/go-common/db/base"
 	"go-blog/internal/db/model/article"
-	db "go-blog/pkg/db/base"
 )
 
 type articleTags struct {
-	db.PgModel[article.Tag]
+	db.PgModel[article.ArticleTag]
 }
 
 func newArticleTags(ds *Store) *articleTags {
-	return &articleTags{PgModel: db.PgModel[article.Tag]{DB: ds.db}}
+	return &articleTags{PgModel: db.PgModel[article.ArticleTag]{DB: ds.db}}
 }

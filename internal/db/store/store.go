@@ -7,9 +7,9 @@ type Factory interface {
 	Article() Article
 	ArticleBody() ArticleBody
 	Category() Category
+	Tag() Tag
+	ArticleSeries() Series
 	ArticleTag() ArticleTag
-	ArticleSeries() ArticleSeries
-	ArticleArticleTag() ArticleArticleTag
 
 	Users() Users
 	Roles() Roles

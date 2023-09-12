@@ -1,14 +1,14 @@
 package postgres
 
 import (
+	db "github.com/dokidokikoi/go-common/db/base"
 	"go-blog/internal/db/model/category"
-	db "go-blog/pkg/db/base"
 )
 
 type categories struct {
 	db.PgModel[category.Category]
 }
 
-func newArticleCategories(ds *Store) *categories {
+func newCategories(ds *Store) *categories {
 	return &categories{PgModel: db.PgModel[category.Category]{DB: ds.db}}
 }

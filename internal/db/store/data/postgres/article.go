@@ -1,8 +1,8 @@
 package postgres
 
 import (
+	db "github.com/dokidokikoi/go-common/db/base"
 	"go-blog/internal/db/model/article"
-	db "go-blog/pkg/db/base"
 )
 
 type articles struct {

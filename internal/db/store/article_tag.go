@@ -1,10 +1,10 @@
 package store
 
 import (
+	"github.com/dokidokikoi/go-common/db/base"
 	"go-blog/internal/db/model/article"
-	"go-blog/pkg/db/base"
 )
 
 type ArticleTag interface {
-	base.BasicCURD[article.Tag]
+	base.BasicCURD[article.ArticleTag]
 }

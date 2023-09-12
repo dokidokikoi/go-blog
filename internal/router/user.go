@@ -1,7 +1,6 @@
 package router
 
 import (
-	"go-blog/internal/controller/role"
 	"go-blog/internal/controller/user"
 	"go-blog/internal/db/store"
 
@@ -9,18 +8,18 @@ import (
 )
 
 func installUser(r *gin.Engine) {
-	storeFactory, _ := store.GetStoreFactory()
-	usersR := r.Group("/users")
-	{
-		userController := user.NewController(storeFactory)
-		usersR.GET("", userController.List)
-	}
+	// storeFactory, _ := store.GetStoreFactory()
+	// usersR := r.Group("/users")
+	// {
+	// 	userController := user.NewController(storeFactory)
+	// 	usersR.GET("", userController.List)
+	// }
 
-	rolesR := r.Group("/roles")
-	{
-		roleController := role.NewController(storeFactory)
-		rolesR.GET("", roleController.List)
-	}
+	// rolesR := r.Group("/roles")
+	// {
+	// 	roleController := role.NewController(storeFactory)
+	// 	rolesR.GET("", roleController.List)
+	// }
 }
 
 func installUserIam(r *gin.Engine) {
@@ -28,12 +27,12 @@ func installUserIam(r *gin.Engine) {
 	usersR := r.Group("/users")
 	{
 		userController := user.NewController(storeFactory)
-		usersR.POST("", userController.Create)
+		usersR.POST("/register", userController.Register)
 	}
 
-	rolesR := r.Group("/roles")
-	{
-		roleController := role.NewController(storeFactory)
-		rolesR.POST("", roleController.Create)
-	}
+	// rolesR := r.Group("/roles")
+	// {
+	// 	roleController := role.NewController(storeFactory)
+	// 	rolesR.POST("", roleController.Create)
+	// }
 }

@@ -35,16 +35,16 @@ func (d *dataCenter) Category() store.Category {
 	return newArticleCategories(d)
 }
 
+func (d *dataCenter) Tag() store.Tag {
+	return newTags(d)
+}
+
+func (d *dataCenter) ArticleSeries() store.Series {
+	return newSeries(d)
+}
+
 func (d *dataCenter) ArticleTag() store.ArticleTag {
-	return newArticleTags(d)
-}
-
-func (d *dataCenter) ArticleSeries() store.ArticleSeries {
-	return newArticleSeries(d)
-}
-
-func (d *dataCenter) ArticleArticleTag() store.ArticleArticleTag {
-	return newArticleArticleTag(d)
+	return newArticleTag(d)
 }
 
 func (d *dataCenter) Users() store.Users {

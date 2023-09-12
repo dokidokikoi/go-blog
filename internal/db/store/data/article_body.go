@@ -5,7 +5,9 @@ import (
 	"go-blog/internal/db/model/article"
 	"go-blog/internal/db/store"
 	"go-blog/internal/db/store/data/postgres"
-	meta "go-blog/pkg/meta/option"
+
+	meta "github.com/dokidokikoi/go-common/meta/option"
+	"gorm.io/gorm"
 )
 
 type articleBodys struct {
@@ -44,8 +46,20 @@ func (a articleBodys) Count(ctx context.Context, t *article.ArticleBody, option 
 	return a.pg.ArticleBodys().Count(ctx, t, option)
 }
 
+func (a articleBodys) CountDB(ctx context.Context, t *article.ArticleBody, option *meta.GetOption) *gorm.DB {
+	return a.pg.ArticleBodys().CountDB(ctx, t, option)
+}
+
 func (a articleBodys) CountComplex(ctx context.Context, example *article.ArticleBody, condition *meta.WhereNode, option *meta.GetOption) (int64, error) {
 	return a.pg.ArticleBodys().CountComplex(ctx, example, condition, option)
+}
+
+func (a articleBodys) CountComplexDB(ctx context.Context, example *article.ArticleBody, condition *meta.WhereNode, option *meta.GetOption) *gorm.DB {
+	return a.pg.ArticleBodys().CountComplexDB(ctx, example, condition, option)
+}
+
+func (a articleBodys) CreateMany2Many(ctx context.Context, example *article.ArticleBody, ids interface{}, option *meta.CreateOption) error {
+	return a.pg.ArticleBodys().CreateMany2Many(ctx, example, ids, option)
 }
 
 func (a articleBodys) List(ctx context.Context, t *article.ArticleBody, option *meta.ListOption) ([]*article.ArticleBody, error) {

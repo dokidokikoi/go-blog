@@ -5,7 +5,8 @@ import (
 	"go-blog/internal/db/model/user"
 	"go-blog/internal/db/store"
 	"go-blog/internal/db/store/data/postgres"
-	meta "go-blog/pkg/meta/option"
+
+	meta "github.com/dokidokikoi/go-common/meta/option"
 )
 
 type roles struct {
