@@ -9,7 +9,8 @@ type Service interface {
 	// Article() article.ArticleSrv
 	// ArticleTag() article.TagSrv
 	Category() CategorySrv
-	// ArticleSeries() article.SeriesSrv
+	Tag() TagSrv
+	Series() SeriesSrv
 
 	User() UserSrv
 	Role() RoleSrv
@@ -36,9 +37,13 @@ func (s service) Category() CategorySrv {
 	return newCategorySrv(s.store)
 }
 
-// func (s service) ArticleSeries() article.SeriesSrv {
-// 	return article.NewSeriesSrv(s.store)
-// }
+func (s service) Tag() TagSrv {
+	return newTagSrv(s.store)
+}
+
+func (s service) Series() SeriesSrv {
+	return newSeriesSrv(s.store)
+}
 
 func (s service) User() UserSrv {
 	return newUserSrv(s.store)

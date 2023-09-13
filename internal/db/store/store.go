@@ -8,7 +8,7 @@ type Factory interface {
 	ArticleBody() ArticleBody
 	Category() Category
 	Tag() Tag
-	ArticleSeries() Series
+	Series() Series
 	ArticleTag() ArticleTag
 
 	Users() Users

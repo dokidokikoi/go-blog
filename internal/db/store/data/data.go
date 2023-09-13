@@ -39,7 +39,7 @@ func (d *dataCenter) Tag() store.Tag {
 	return newTags(d)
 }
 
-func (d *dataCenter) ArticleSeries() store.Series {
+func (d *dataCenter) Series() store.Series {
 	return newSeries(d)
 }
 

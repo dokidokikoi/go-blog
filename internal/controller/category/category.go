@@ -8,7 +8,7 @@ import (
 type CreateCategory struct {
 	CategoryName string `json:"category_name" binding:"required"`
 	Summary      string `json:"summary" binding:"required"`
-	Type         int    `json:"type" binding:"required"`
+	Type         int8   `json:"type" binding:"required"`
 }
 
 type UpdateCategory struct {
@@ -23,7 +23,7 @@ type DelCategory struct {
 
 type Query struct {
 	Keyword string `json:"keyword"`
-	Type    int    `json:"type" binding:"required"`
+	Type    int8   `json:"type" binding:"required"`
 }
 
 type Controller struct {
