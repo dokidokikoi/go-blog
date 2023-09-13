@@ -16,6 +16,8 @@ type CreateUser struct {
 type LoginParam struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required,min=6"`
+	UUID     string `json:"uuid" binding:"required"`
+	Code     string `json:"code" binding:"required"`
 }
 
 type Controller struct {

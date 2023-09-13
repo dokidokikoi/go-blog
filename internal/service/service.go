@@ -8,7 +8,7 @@ import (
 type Service interface {
 	// Article() article.ArticleSrv
 	// ArticleTag() article.TagSrv
-	// Category() category.CategorySrv
+	Category() CategorySrv
 	// ArticleSeries() article.SeriesSrv
 
 	User() UserSrv
@@ -32,9 +32,9 @@ var (
 // 	return article.NewTagSrv(s.store)
 // }
 
-// func (s service) Category() category.CategorySrv {
-// 	return category.NewCategorySrv(s.store)
-// }
+func (s service) Category() CategorySrv {
+	return newCategorySrv(s.store)
+}
 
 // func (s service) ArticleSeries() article.SeriesSrv {
 // 	return article.NewSeriesSrv(s.store)

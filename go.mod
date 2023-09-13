@@ -5,12 +5,16 @@ go 1.19
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dokidokikoi/go-common v0.0.0-20230912095159-a1ebc80961f7
+	github.com/fogleman/gg v1.3.0
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis/v9 v9.0.0-rc.1
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
+	github.com/google/uuid v1.1.2
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.15.0
 	go.mongodb.org/mongo-driver v1.11.0
+	golang.org/x/image v0.0.0-20190802002840-cff245a6509b
 	gorm.io/gorm v1.25.4
 )
 

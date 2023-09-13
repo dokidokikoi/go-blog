@@ -10,6 +10,7 @@ const (
 // 业务错误码 1xx1xx
 const (
 	ErrPassword int = iota + 100101
+	ErrCaptcha
 )
 
 // 数据库错误码  1xx2xx
@@ -18,11 +19,7 @@ const (
 
 	ErrRecordNotFound
 
-	ErrUserNotFound
+	ErrDatabasDel
 
-	ErrRoleNotFound
-
-	ErrArticleNotFound
-
-	ErrCategoryNotFound
+	NoUpdateRows
 )

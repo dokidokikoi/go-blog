@@ -13,6 +13,8 @@ var (
 	ErrDatabaseOp  = errors.New("录入失败")
 	ErrSystemErr   = errors.New("系统错误")
 	ErrPassword    = errors.New("密码错误")
+	ErrCaptcha     = errors.New("验证码错误")
+	ErrDatabasDel  = errors.New("删除")
 )
 
 var (
@@ -21,4 +23,7 @@ var (
 	ApiRecordNotFound = ServerFailed(RecordNotFound.Error(), code.ErrRecordNotFound)
 	ApiErrSystemErr   = ServerFailed(ErrSystemErr.Error(), code.ErrSystemErr)
 	ApiErrPassword    = ClientFailed(ErrPassword.Error(), code.ErrPassword)
+	ApiErrCaptcha     = ClientFailed(ErrCaptcha.Error(), code.ErrCaptcha)
+	ApiErrDatabasDel  = ServerFailed(ErrDatabasDel.Error(), code.ErrDatabasDel)
+	ApiNoUpdateRows   = ServerFailed(NoUpdateRows.Error(), code.NoUpdateRows)
 )

@@ -5,7 +5,9 @@ import (
 	"go-blog/internal/db/model/user"
 	myErrors "go-blog/internal/errors"
 
+	zaplog "github.com/dokidokikoi/go-common/log/zap"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func (c *Controller) Register(ctx *gin.Context) {
@@ -30,7 +32,8 @@ func (c *Controller) Register(ctx *gin.Context) {
 		Password: createUser.Password,
 		RoleID:   targetRole.ID,
 	}
-	if c.srv.User().Create(ctx, targetUser, nil) != nil {
+	if err := c.srv.User().Create(ctx, targetUser, nil); err != nil {
+		zaplog.L().Error("创建用户失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrDatabase, nil)
 		return
 	}
