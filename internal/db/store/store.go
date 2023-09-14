@@ -10,6 +10,8 @@ type Factory interface {
 	Tag() Tag
 	Series() Series
 	ArticleTag() ArticleTag
+	Items() Items
+	Sites() Sites
 
 	Users() Users
 	Roles() Roles

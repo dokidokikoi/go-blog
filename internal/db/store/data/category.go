@@ -69,6 +69,6 @@ func (a articleCategories) DeleteByIds(ctx context.Context, ids []uint) error {
 	return a.pg.Categories().DeleteByIds(ctx, ids)
 }
 
-func newArticleCategories(d *dataCenter) store.Category {
+func newCategories(d *dataCenter) store.Category {
 	return &articleCategories{pg: d.pg}
 }

@@ -8,7 +8,7 @@ import (
 
 // 用户
 type User struct {
-	gorm.Model
+	ID         uint      `gorm:"primarykey"`
 	Account    string    `json:"account" gorm:"unique"`
 	Avatar     string    `json:"avatar"`
 	Email      string    `json:"email" gorm:"unique"`
@@ -18,6 +18,9 @@ type User struct {
 	LastLogin  time.Time `json:"last_login"`
 	RoleID     uint      `json:"role_id"`
 	Role       Role      `json:"role" gorm:"foreignKey:RoleID"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  gorm.DeletedAt `gorm:"index"`
 }
 
 // 角色

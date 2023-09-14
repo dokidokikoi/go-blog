@@ -14,7 +14,7 @@ const (
 )
 
 type Item struct {
-	gorm.Model
+	ID             uint      `gorm:"primarykey"`
 	ItemName       string    `json:"item_name"`
 	Total          uint32    `json:"total"`
 	Progress       uint32    `json:"progress"`
@@ -23,5 +23,8 @@ type Item struct {
 	Author         string    `json:"author"`
 	SerialNumber   string    `json:"serial_number"`
 	ProductionDate time.Time `json:"production_date"`
-	Type           string    `json:"type"`
+	Type           int8      `json:"type"`
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
+	DeletedAt      gorm.DeletedAt `gorm:"index"`
 }

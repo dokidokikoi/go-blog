@@ -30,4 +30,6 @@ func (c *Controller) Create(ctx *gin.Context) {
 		core.WriteResponse(ctx, myErrors.ApiErrDatabase, nil)
 		return
 	}
+
+	core.WriteResponse(ctx, nil, nil)
 }

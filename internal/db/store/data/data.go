@@ -32,7 +32,7 @@ func (d *dataCenter) ArticleBody() store.ArticleBody {
 }
 
 func (d *dataCenter) Category() store.Category {
-	return newArticleCategories(d)
+	return newCategories(d)
 }
 
 func (d *dataCenter) Tag() store.Tag {
@@ -53,6 +53,14 @@ func (d *dataCenter) Users() store.Users {
 
 func (d *dataCenter) Roles() store.Roles {
 	return newRoles(d)
+}
+
+func (d *dataCenter) Items() store.Items {
+	return d.pg.Items()
+}
+
+func (d *dataCenter) Sites() store.Sites {
+	return d.pg.Sites()
 }
 
 func GetStoreDBFactory() (store.Factory, error) {

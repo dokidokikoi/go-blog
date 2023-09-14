@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"fmt"
+
 	"github.com/dokidokikoi/go-common/db"
 
 	"go-blog/internal/config"
@@ -55,6 +56,14 @@ func (d *Store) Users() *users {
 
 func (d *Store) Roles() *roles {
 	return newRoles(d)
+}
+
+func (d *Store) Items() *items {
+	return newItems(d)
+}
+
+func (d *Store) Sites() *sites {
+	return newSites(d)
 }
 
 type pgOptions struct {
