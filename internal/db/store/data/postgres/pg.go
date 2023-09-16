@@ -66,6 +66,14 @@ func (d *Store) Sites() *sites {
 	return newSites(d)
 }
 
+func (d *Store) SiteTags() *siteTags {
+	return newSiteTags(d)
+}
+
+func (d *Store) Links() *links {
+	return newLinks(d)
+}
+
 type pgOptions struct {
 	username string
 	database string

@@ -1,9 +1,9 @@
-package list
+package link
 
 import (
 	"fmt"
 	"go-blog/internal/core"
-	"go-blog/internal/db/model/list"
+	"go-blog/internal/db/model/link"
 	myErrors "go-blog/internal/errors"
 
 	zaplog "github.com/dokidokikoi/go-common/log/zap"
@@ -29,27 +29,27 @@ func (c *Controller) List(ctx *gin.Context) {
 
 	listOption := pageQuery.GetListOption()
 	var (
-		items   []*list.Item
+		items   []*link.Link
 		total   int64
 		err     error
-		example = &list.Item{Type: input.Type}
+		example = &link.Link{}
 	)
 	if input.Keyword != "" {
 		node := &meta.WhereNode{
 			Conditions: []*meta.Condition{
 				{
-					Field:    "item_name",
+					Field:    "link_name",
 					Operator: meta.LIKE,
 					Value:    fmt.Sprintf("%%%s%%", input.Keyword),
 				},
 			},
 		}
-		items, total, err = c.srv.Items().ListByWhereNode(ctx, example, node, listOption)
+		items, total, err = c.srv.Link().ListByWhereNode(ctx, example, node, listOption)
 	} else {
-		items, total, err = c.srv.Items().List(ctx, example, listOption)
+		items, total, err = c.srv.Link().List(ctx, example, listOption)
 	}
 	if err != nil {
-		zaplog.L().Error("获取分类列表失败", zap.Error(err))
+		zaplog.L().Error("获取友链列表失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, "")
 		return
 	}

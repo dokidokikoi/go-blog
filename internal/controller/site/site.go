@@ -22,8 +22,8 @@ type CreateSite struct {
 	Summary  string   `json:"summary" binding:"required"`
 	Addr     string   `json:"addr"`
 	Url      string   `json:"url" binding:"required"`
-	Category Category `json:"category" gorm:"foreignKey:CategoryID"`
-	Tags     []Tag    `json:"tags" gorm:"many2many:site_tag"`
+	Category Category `json:"category"`
+	Tags     []Tag    `json:"tags"`
 }
 
 type UpdateSite struct {
@@ -33,8 +33,8 @@ type UpdateSite struct {
 	Summary  string   `json:"summary"`
 	Addr     string   `json:"addr"`
 	Url      string   `json:"url"`
-	Category Category `json:"category" gorm:"foreignKey:CategoryID"`
-	Tags     []Tag    `json:"tags" gorm:"many2many:site_tag"`
+	Category Category `json:"category"`
+	Tags     []Tag    `json:"tags"`
 }
 
 type DelSite struct {

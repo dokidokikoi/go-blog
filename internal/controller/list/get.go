@@ -19,11 +19,11 @@ func (c *Controller) Get(ctx *gin.Context) {
 		return
 	}
 
-	cate, err := c.srv.Items().Get(ctx, &list.Item{ID: uint(itemID)}, nil)
+	l, err := c.srv.Items().Get(ctx, &list.Item{ID: uint(itemID)}, nil)
 	if err != nil {
 		zaplog.L().Error("获取项目信息失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)
 		return
 	}
-	core.WriteResponse(ctx, nil, cate)
+	core.WriteResponse(ctx, nil, l)
 }

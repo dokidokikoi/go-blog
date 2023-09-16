@@ -16,6 +16,8 @@ type SiteSrv interface {
 	DeleteCollection(ctx context.Context, examples []*site.Site, option *meta.DeleteCollectionOption) []error
 	List(ctx context.Context, example *site.Site, option *meta.ListOption) ([]*site.Site, int64, error)
 	ListByWhereNode(ctx context.Context, example *site.Site, node *meta.WhereNode, option *meta.ListOption) ([]*site.Site, int64, error)
+
+	DeleteSiteAllTags(ctx context.Context, siteID uint) error
 }
 
 type siteSrv struct {
@@ -60,6 +62,10 @@ func (ss *siteSrv) ListByWhereNode(ctx context.Context, example *site.Site, node
 
 	list, err := ss.store.Sites().ListComplex(ctx, example, node, option)
 	return list, total, err
+}
+
+func (ss *siteSrv) DeleteSiteAllTags(ctx context.Context, siteID uint) error {
+	return ss.store.SiteTags().Delete(ctx, &site.SiteTag{SiteID: siteID}, nil)
 }
 
 func newSiteSrv(store store.Factory) SiteSrv {

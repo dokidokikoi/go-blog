@@ -63,6 +63,14 @@ func (d *dataCenter) Sites() store.Sites {
 	return d.pg.Sites()
 }
 
+func (d *dataCenter) SiteTags() store.SiteTag {
+	return d.pg.SiteTags()
+}
+
+func (d *dataCenter) Link() store.Link {
+	return d.pg.Links()
+}
+
 func GetStoreDBFactory() (store.Factory, error) {
 	once.Do(func() {
 		pg, err := postgres.GetPGFactory()

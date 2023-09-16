@@ -14,7 +14,7 @@ var (
 	ErrSystemErr   = errors.New("系统错误")
 	ErrPassword    = errors.New("密码错误")
 	ErrCaptcha     = errors.New("验证码错误")
-	ErrDatabasDel  = errors.New("删除")
+	ErrDatabasDel  = errors.New("删除失败")
 )
 
 var (

@@ -11,8 +11,10 @@ type Service interface {
 	Category() CategorySrv
 	Tag() TagSrv
 	Series() SeriesSrv
+	Link() LinkSrv
 
 	Items() ItemSrv
+	Site() SiteSrv
 
 	User() UserSrv
 	Role() RoleSrv
@@ -57,6 +59,14 @@ func (s service) Role() RoleSrv {
 
 func (s service) Items() ItemSrv {
 	return newItemSrv(s.store)
+}
+
+func (s service) Site() SiteSrv {
+	return newSiteSrv(s.store)
+}
+
+func (s service) Link() LinkSrv {
+	return newLinkSrv(s.store)
 }
 
 func NewService(store store.Factory) Service {

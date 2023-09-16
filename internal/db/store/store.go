@@ -12,6 +12,8 @@ type Factory interface {
 	ArticleTag() ArticleTag
 	Items() Items
 	Sites() Sites
+	SiteTags() SiteTag
+	Link() Link
 
 	Users() Users
 	Roles() Roles
