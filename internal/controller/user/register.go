@@ -5,6 +5,7 @@ import (
 	"go-blog/internal/db/model/user"
 	myErrors "go-blog/internal/errors"
 
+	"github.com/dokidokikoi/go-common/crypto"
 	zaplog "github.com/dokidokikoi/go-common/log/zap"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -14,6 +15,13 @@ func (c *Controller) Register(ctx *gin.Context) {
 	var createUser CreateUser
 	if ctx.ShouldBindJSON(&createUser) != nil {
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
+		return
+	}
+
+	pwd, err := crypto.EncryptPassword(createUser.Password)
+	if err != nil {
+		zaplog.L().Error("用户密码加密错误", zap.Error(err))
+		core.WriteResponse(ctx, myErrors.ApiErrSystemErr, nil)
 		return
 	}
 
@@ -29,7 +37,7 @@ func (c *Controller) Register(ctx *gin.Context) {
 		Avatar:   createUser.Avatar,
 		Email:    createUser.Email,
 		NickName: createUser.NickName,
-		Password: createUser.Password,
+		Password: pwd,
 		RoleID:   targetRole.ID,
 	}
 	if err := c.srv.User().Create(ctx, targetUser, nil); err != nil {

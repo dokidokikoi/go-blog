@@ -12,14 +12,14 @@ import (
 )
 
 func (c *Controller) Get(ctx *gin.Context) {
-	itemID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	linkID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
 		zaplog.L().Error("参数校验失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
 		return
 	}
 
-	l, err := c.srv.Link().Get(ctx, &link.Link{ID: uint(itemID)}, nil)
+	l, err := c.srv.Link().Get(ctx, &link.Link{ID: uint(linkID)}, nil)
 	if err != nil {
 		zaplog.L().Error("获取友链信息失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)

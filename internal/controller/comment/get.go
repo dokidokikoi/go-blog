@@ -1,8 +1,8 @@
-package site
+package comment
 
 import (
 	"go-blog/internal/core"
-	"go-blog/internal/db/model/site"
+	"go-blog/internal/db/model/comment"
 	myErrors "go-blog/internal/errors"
 	"strconv"
 
@@ -12,18 +12,18 @@ import (
 )
 
 func (c *Controller) Get(ctx *gin.Context) {
-	siteID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	commentID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
 		zaplog.L().Error("参数校验失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
 		return
 	}
 
-	s, err := c.srv.Site().Get(ctx, &site.Site{ID: uint(siteID)}, nil)
+	l, err := c.srv.Comment().Get(ctx, &comment.Comment{ID: uint(commentID)}, nil)
 	if err != nil {
-		zaplog.L().Error("获取网站信息失败", zap.Error(err))
+		zaplog.L().Error("获取评论信息失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)
 		return
 	}
-	core.WriteResponse(ctx, nil, s)
+	core.WriteResponse(ctx, nil, l)
 }

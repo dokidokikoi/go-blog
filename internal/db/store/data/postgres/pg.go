@@ -74,6 +74,10 @@ func (d *Store) Links() *links {
 	return newLinks(d)
 }
 
+func (d *Store) Comments() *comments {
+	return newComments(d)
+}
+
 type pgOptions struct {
 	username string
 	database string

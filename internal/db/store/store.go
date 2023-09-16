@@ -14,6 +14,7 @@ type Factory interface {
 	Sites() Sites
 	SiteTags() SiteTag
 	Link() Link
+	Comments() Comments
 
 	Users() Users
 	Roles() Roles

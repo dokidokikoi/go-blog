@@ -71,6 +71,10 @@ func (d *dataCenter) Link() store.Link {
 	return d.pg.Links()
 }
 
+func (d *dataCenter) Comments() store.Comments {
+	return d.pg.Comments()
+}
+
 func GetStoreDBFactory() (store.Factory, error) {
 	once.Do(func() {
 		pg, err := postgres.GetPGFactory()

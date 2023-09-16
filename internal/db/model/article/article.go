@@ -5,13 +5,14 @@ import (
 	"go-blog/internal/db/model/series"
 	"go-blog/internal/db/model/tag"
 	"go-blog/internal/db/model/user"
+	"time"
 
 	"gorm.io/gorm"
 )
 
 // 文章
 type Article struct {
-	gorm.Model
+	ID            uint              `gorm:"primarykey"`
 	Title         string            `json:"title"`
 	Summary       string            `json:"summary"`
 	Cover         string            `json:"cover"`
@@ -28,6 +29,9 @@ type Article struct {
 	AuthorID      uint              `json:"author_id"`
 	Author        user.User         `json:"author" gorm:"foreignKey:AuthorID"`
 	ArticleBody   ArticleBody       `json:"article_body" gorm:"foreignKey:ArticleBodyID"`
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     gorm.DeletedAt `gorm:"index"`
 }
 
 type ArticleBody struct {

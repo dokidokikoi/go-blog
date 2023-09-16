@@ -6,12 +6,12 @@ import (
 )
 
 type Service interface {
-	// Article() article.ArticleSrv
-	// ArticleTag() article.TagSrv
+	Article() ArticleSrv
 	Category() CategorySrv
 	Tag() TagSrv
 	Series() SeriesSrv
 	Link() LinkSrv
+	Comment() CommentSrv
 
 	Items() ItemSrv
 	Site() SiteSrv
@@ -29,13 +29,9 @@ var (
 	once          sync.Once
 )
 
-// func (s service) Article() article.ArticleSrv {
-// 	return article.NewArticleSrv(s.store)
-// }
-
-// func (s service) ArticleTag() article.TagSrv {
-// 	return article.NewTagSrv(s.store)
-// }
+func (s service) Article() ArticleSrv {
+	return newArticleSrv(s.store)
+}
 
 func (s service) Category() CategorySrv {
 	return newCategorySrv(s.store)
@@ -67,6 +63,10 @@ func (s service) Site() SiteSrv {
 
 func (s service) Link() LinkSrv {
 	return newLinkSrv(s.store)
+}
+
+func (s service) Comment() CommentSrv {
+	return newCommentSrv(s.store)
 }
 
 func NewService(store store.Factory) Service {
