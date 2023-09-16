@@ -18,16 +18,15 @@ type Tag struct {
 }
 
 type CreateArticle struct {
-	Title         string        `json:"title"`
-	Summary       string        `json:"summary"`
-	Cover         string        `json:"cover"`
-	Weight        int           `json:"weight"`
-	ArticleBodyID uint          `json:"article_body_id"`
-	Category      Category      `json:"category"`
-	Tags          []Tag         `json:"tags"`
-	Series        series.Series `json:"series"`
-	AuthorID      uint          `json:"author_id"`
-	ArticleBody   string        `json:"article_body"`
+	Title       string        `json:"title"`
+	Summary     string        `json:"summary"`
+	Cover       string        `json:"cover"`
+	Weight      int           `json:"weight"`
+	Category    Category      `json:"category"`
+	Tags        []Tag         `json:"tags"`
+	Series      series.Series `json:"series"`
+	AuthorID    uint          `json:"author_id"`
+	ArticleBody string        `json:"article_body"`
 }
 
 type UpdateArticle struct {
@@ -48,7 +47,9 @@ type DelArticle struct {
 }
 
 type Query struct {
-	Keyword string `json:"keyword"`
+	Keyword    string `form:"keyword"`
+	CategoryID uint   `form:"category_id"`
+	SeriesID   uint   `form:"series_id"`
 }
 
 type Controller struct {

@@ -1,8 +1,9 @@
 package store
 
 import (
-	"github.com/dokidokikoi/go-common/db/base"
 	"go-blog/internal/db/model/category"
+
+	"github.com/dokidokikoi/go-common/db/base"
 )
 
 type Category interface {

@@ -17,7 +17,8 @@ type DelComment struct {
 }
 
 type Query struct {
-	Keyword string `json:"keyword"`
+	Keyword   string `form:"keyword"`
+	ArticleID uint   `form:"article_id"`
 }
 
 type Controller struct {

@@ -15,6 +15,7 @@ var (
 	ErrPassword    = errors.New("密码错误")
 	ErrCaptcha     = errors.New("验证码错误")
 	ErrDatabasDel  = errors.New("删除失败")
+	ErrGenCaptcha  = errors.New("生成验证码错误")
 )
 
 var (
@@ -26,4 +27,5 @@ var (
 	ApiErrCaptcha     = ClientFailed(ErrCaptcha.Error(), code.ErrCaptcha)
 	ApiErrDatabasDel  = ServerFailed(ErrDatabasDel.Error(), code.ErrDatabasDel)
 	ApiNoUpdateRows   = ServerFailed(NoUpdateRows.Error(), code.NoUpdateRows)
+	ApiErrGenCaptcha  = ServerFailed(ErrGenCaptcha.Error(), code.ErrGenCaptcha)
 )

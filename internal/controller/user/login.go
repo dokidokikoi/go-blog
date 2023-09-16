@@ -1,10 +1,11 @@
 package user
 
 import (
-	"fmt"
+	"context"
 	"go-blog/internal/core"
 	"go-blog/internal/db/model/user"
 	myErrors "go-blog/internal/errors"
+	"go-blog/internal/service"
 	"go-blog/pkg/captcha"
 	"time"
 
@@ -25,7 +26,7 @@ func (c *Controller) Login(ctx *gin.Context) {
 		return
 	}
 
-	if !verifyCaptcha(loginParam.UUID, loginParam.Code) {
+	if !verifyCaptcha(c.srv, loginParam.UUID, loginParam.Code) {
 		zaplog.L().Error("验证码验证失败")
 		core.WriteResponse(ctx, myErrors.ApiErrCaptcha, nil)
 		return
@@ -56,9 +57,13 @@ func (c *Controller) Login(ctx *gin.Context) {
 func (c *Controller) GetCaptha(ctx *gin.Context) {
 	text, captcha := captcha.GetStandCaptcha()
 	uuid := uuid.New().String()
-	fmt.Println(text, uuid)
-	// TODO: 将text存入redis
-	core.WriteResponse(ctx, nil, gin.H{"captcha": captcha})
+	err := c.srv.User().SetCaptchaCode(ctx, uuid, text)
+	if err != nil {
+		zaplog.L().Error("存入验证码失败", zap.Error(err))
+		core.WriteResponse(ctx, myErrors.ApiErrGenCaptcha, nil)
+		return
+	}
+	core.WriteResponse(ctx, nil, gin.H{"uuid": uuid, "captcha": captcha})
 }
 
 func GenerateToken(u *user.User) (string, error) {
@@ -80,7 +85,12 @@ func GenerateToken(u *user.User) (string, error) {
 	return token, err
 }
 
-func verifyCaptcha(uuid, text string) bool {
+func verifyCaptcha(srv service.Service, uuid, text string) bool {
 	// TODO: 根据uuid将验证码从redis拿出与用户对比
+	code, err := srv.User().GetCaptchCode(context.TODO(), uuid)
+	srv.User().DelCaptchCode(context.TODO(), uuid)
+	if err != nil || code != text {
+		return false
+	}
 	return true
 }

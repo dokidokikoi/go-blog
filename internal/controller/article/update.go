@@ -28,10 +28,17 @@ func (c *Controller) Update(ctx *gin.Context) {
 		})
 	}
 
-	err := c.srv.Site().DeleteSiteAllTags(ctx, input.ID)
+	err := c.srv.Article().DeleteArticleAllTags(ctx, input.ID)
 	if err != nil {
 		zaplog.L().Error("删除文章标签失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrDatabasDel, nil)
+		return
+	}
+
+	a, err := c.srv.Article().Get(ctx, &article.Article{ID: input.ID}, nil)
+	if err != nil {
+		zaplog.L().Error("文章不存在", zap.Error(err))
+		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)
 		return
 	}
 
@@ -43,6 +50,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 		Weight:  input.Weight,
 		Series:  input.Series,
 		ArticleBody: article.ArticleBody{
+			ID:      a.ArticleBodyID,
 			Content: input.ArticleBody,
 		},
 		Category: category.Category{
@@ -55,7 +63,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 	}, nil)
 	if err != nil {
 		zaplog.L().Error("更新文章消息失败", zap.Error(err))
-		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
+		core.WriteResponse(ctx, myErrors.ApiNoUpdateRows, nil)
 		return
 	}
 	core.WriteResponse(ctx, nil, nil)

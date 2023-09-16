@@ -18,6 +18,7 @@ type SiteSrv interface {
 	ListByWhereNode(ctx context.Context, example *site.Site, node *meta.WhereNode, option *meta.ListOption) ([]*site.Site, int64, error)
 
 	DeleteSiteAllTags(ctx context.Context, siteID uint) error
+	ListTagSite(ctx context.Context, tagID uint, option *meta.ListOption) ([]*site.Site, int64, error)
 }
 
 type siteSrv struct {
@@ -66,6 +67,29 @@ func (ss *siteSrv) ListByWhereNode(ctx context.Context, example *site.Site, node
 
 func (ss *siteSrv) DeleteSiteAllTags(ctx context.Context, siteID uint) error {
 	return ss.store.SiteTags().Delete(ctx, &site.SiteTag{SiteID: siteID}, nil)
+}
+
+func (as *siteSrv) ListTagSite(ctx context.Context, tagID uint, option *meta.ListOption) ([]*site.Site, int64, error) {
+	siteTags, err := as.store.SiteTags().List(ctx, &site.SiteTag{TagID: tagID}, &meta.ListOption{PageSize: 1000})
+	if err != nil {
+		return nil, 0, err
+	}
+	siteIDs := []uint{}
+	for _, st := range siteTags {
+		siteIDs = append(siteIDs, st.SiteID)
+	}
+	node := &meta.WhereNode{
+		Conditions: []*meta.Condition{
+			{
+				Field:    "id",
+				Operator: meta.IN,
+				Value:    siteIDs,
+			},
+		},
+	}
+
+	sites, err := as.store.Sites().ListComplex(ctx, nil, node, option)
+	return sites, int64(len(sites)), err
 }
 
 func newSiteSrv(store store.Factory) SiteSrv {

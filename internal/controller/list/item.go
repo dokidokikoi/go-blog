@@ -35,8 +35,8 @@ type DelItem struct {
 }
 
 type Query struct {
-	Keyword string `json:"keyword"`
-	Type    int8   `json:"type"`
+	Keyword string `form:"keyword"`
+	Type    int8   `form:"type"`
 }
 
 type Controller struct {

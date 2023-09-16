@@ -98,6 +98,7 @@ func GetPGFactory() (*Store, error) {
 	}
 	var pgFactory *Store
 	dbIns, err = db.NewPostgresql(opts.username, opts.database, opts.funcList...)
+	dbIns = dbIns.Session(&gorm.Session{FullSaveAssociations: true})
 	pgFactory = &Store{dbIns}
 
 	if pgFactory == nil || err != nil {

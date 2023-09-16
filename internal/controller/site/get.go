@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	zaplog "github.com/dokidokikoi/go-common/log/zap"
+	meta "github.com/dokidokikoi/go-common/meta/option"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -19,7 +20,8 @@ func (c *Controller) Get(ctx *gin.Context) {
 		return
 	}
 
-	s, err := c.srv.Site().Get(ctx, &site.Site{ID: uint(siteID)}, nil)
+	option := &meta.GetOption{Preload: []string{"Category", "Tags"}}
+	s, err := c.srv.Site().Get(ctx, &site.Site{ID: uint(siteID)}, option)
 	if err != nil {
 		zaplog.L().Error("获取网站信息失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)

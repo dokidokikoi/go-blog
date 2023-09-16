@@ -20,8 +20,8 @@ type DelTag struct {
 }
 
 type Query struct {
-	Keyword string `json:"keyword"`
-	Type    int8   `json:"type" binding:"required"`
+	Keyword string `form:"keyword"`
+	Type    int8   `form:"type" binding:"required"`
 }
 
 type Controller struct {

@@ -13,6 +13,10 @@ type UserSrv interface {
 	Create(ctx context.Context, u *user.User, option *meta.CreateOption) error
 	Get(ctx context.Context, u *user.User, option *meta.GetOption) (*user.User, error)
 	List(ctx context.Context, keyword string, option *meta.ListOption) ([]*user.User, int64, error)
+
+	SetCaptchaCode(ctx context.Context, uuid, code string) error
+	GetCaptchCode(ctx context.Context, key string) (text string, code error)
+	DelCaptchCode(ctx context.Context, key string) error
 }
 
 type userSrv struct {
@@ -42,6 +46,18 @@ func (srv userSrv) List(ctx context.Context, keyword string, option *meta.ListOp
 	count, _ := srv.store.Users().CountComplex(ctx, &user.User{}, root, &option.GetOption)
 	result, err := srv.store.Users().ListComplex(ctx, &user.User{}, root, option)
 	return result, count, err
+}
+
+func (srv userSrv) SetCaptchaCode(ctx context.Context, uuid, code string) error {
+	return srv.store.Users().SetCaptchCode(ctx, uuid, code)
+}
+
+func (srv userSrv) GetCaptchCode(ctx context.Context, key string) (text string, code error) {
+	return srv.store.Users().GetCaptchCode(ctx, key)
+}
+
+func (srv userSrv) DelCaptchCode(ctx context.Context, key string) error {
+	return srv.store.Users().DelCaptchCode(ctx, key)
 }
 
 func newUserSrv(store store.Factory) UserSrv {

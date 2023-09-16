@@ -49,3 +49,7 @@ func (c *Controller) List(ctx *gin.Context) {
 
 	core.WriteListResponse(ctx, nil, total, list)
 }
+
+func (c *Controller) ListSites(ctx *gin.Context) {
+
+}

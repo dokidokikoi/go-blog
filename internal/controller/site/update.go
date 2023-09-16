@@ -36,6 +36,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 	}
 
 	err = c.srv.Site().Update(ctx, &site.Site{
+		ID:       input.ID,
 		SiteName: input.SiteName,
 		Summary:  input.Summary,
 		Logo:     input.Logo,
@@ -50,7 +51,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 	}, nil)
 	if err != nil {
 		zaplog.L().Error("更新网站消息失败", zap.Error(err))
-		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
+		core.WriteResponse(ctx, myErrors.ApiNoUpdateRows, nil)
 		return
 	}
 	core.WriteResponse(ctx, nil, nil)

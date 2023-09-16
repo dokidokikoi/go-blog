@@ -8,18 +8,14 @@ import (
 )
 
 func installUser(r *gin.Engine) {
-	// storeFactory, _ := store.GetStoreFactory()
-	// usersR := r.Group("/users")
-	// {
-	// 	userController := user.NewController(storeFactory)
-	// 	usersR.GET("", userController.List)
-	// }
-
-	// rolesR := r.Group("/roles")
-	// {
-	// 	roleController := role.NewController(storeFactory)
-	// 	rolesR.GET("", roleController.List)
-	// }
+	storeFactory, _ := store.GetStoreFactory()
+	usersR := r.Group("/users")
+	userController := user.NewController(storeFactory)
+	{
+		usersR.POST("/register", userController.Register)
+		usersR.POST("/login", userController.Login)
+		usersR.POST("/captcha", userController.GetCaptha)
+	}
 }
 
 func installUserIam(r *gin.Engine) {
@@ -27,12 +23,11 @@ func installUserIam(r *gin.Engine) {
 	usersR := r.Group("/users")
 	{
 		userController := user.NewController(storeFactory)
-		usersR.POST("/register", userController.Register)
+		usersR.GET("/:id", userController.Get)
 	}
+}
 
-	// rolesR := r.Group("/roles")
-	// {
-	// 	roleController := role.NewController(storeFactory)
-	// 	rolesR.POST("", roleController.Create)
-	// }
+func init() {
+	installs = append(installs, installUser)
+	installsIam = append(installsIam, installUserIam)
 }

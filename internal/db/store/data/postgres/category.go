@@ -1,8 +1,9 @@
 package postgres
 
 import (
-	db "github.com/dokidokikoi/go-common/db/base"
 	"go-blog/internal/db/model/category"
+
+	db "github.com/dokidokikoi/go-common/db/base"
 )
 
 type categories struct {

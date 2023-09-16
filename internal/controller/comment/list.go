@@ -32,7 +32,7 @@ func (c *Controller) List(ctx *gin.Context) {
 		items   []*comment.Comment
 		total   int64
 		err     error
-		example = &comment.Comment{}
+		example = &comment.Comment{ArticleID: input.ArticleID}
 	)
 	if input.Keyword != "" {
 		node := &meta.WhereNode{

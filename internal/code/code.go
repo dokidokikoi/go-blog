@@ -11,6 +11,7 @@ const (
 const (
 	ErrPassword int = iota + 100101
 	ErrCaptcha
+	ErrGenCaptcha
 )
 
 // 数据库错误码  1xx2xx

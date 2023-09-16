@@ -25,7 +25,7 @@ type DelLink struct {
 }
 
 type Query struct {
-	Keyword string `json:"keyword"`
+	Keyword string `form:"keyword"`
 }
 
 type Controller struct {

@@ -8,13 +8,13 @@ import (
 )
 
 type transaction struct {
-	mongo *mongo.Store
-	pg    *postgres.Store
-	redis *redis.Store
+	mongo    *mongo.Store
+	pg       *postgres.Store
+	redisCli *redis.Store
 }
 
 func (t *transaction) TransactionBegin() store.Factory {
-	return &dataCenter{mongo: t.mongo, redis: t.redis, pg: t.pg.Transaction().TransactionBegin()}
+	return &dataCenter{mongo: t.mongo, redisCli: t.redisCli, pg: t.pg.Transaction().TransactionBegin()}
 }
 
 func (t *transaction) TransactionRollback() {
@@ -29,8 +29,8 @@ var _ store.Transaction = (*transaction)(nil)
 
 func newTransaction(center *dataCenter) *transaction {
 	return &transaction{
-		pg:    center.pg,
-		redis: center.redis,
-		mongo: center.mongo,
+		pg:       center.pg,
+		redisCli: center.redisCli,
+		mongo:    center.mongo,
 	}
 }

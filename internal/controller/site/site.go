@@ -42,7 +42,8 @@ type DelSite struct {
 }
 
 type Query struct {
-	Keyword string `json:"keyword"`
+	Keyword    string `form:"keyword"`
+	CategoryID uint   `form:"category_id"`
 }
 
 type Controller struct {

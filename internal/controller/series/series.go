@@ -8,7 +8,6 @@ import (
 type CreateSeries struct {
 	SeriesName string `json:"series_name" binding:"required"`
 	Summary    string `json:"summary" binding:"required"`
-	Type       int8   `json:"type" binding:"required"`
 }
 
 type UpdateSeries struct {
@@ -22,8 +21,8 @@ type DelSeries struct {
 }
 
 type Query struct {
-	Keyword string `json:"keyword"`
-	Type    int8   `json:"type" binding:"required"`
+	Keyword string `form:"keyword"`
+	Type    int8   `form:"type" binding:"required"`
 }
 
 type Controller struct {

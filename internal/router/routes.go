@@ -1,15 +1,23 @@
 package router
 
 import (
+	"go-blog/internal/middleware"
+
 	"github.com/gin-gonic/gin"
 )
 
-func InstallAll(r *gin.Engine) {
-	installArticle(r)
-	installUser(r)
-	installCategory(r)
+type installFunc func(r *gin.Engine)
 
-	installArticleIam(r)
-	installUserIam(r)
-	installcategoryIam(r)
+var installs []installFunc
+var installsIam []installFunc
+
+func InstallAll(r *gin.Engine) {
+	for _, f := range installs {
+		f(r)
+	}
+
+	r.Use(middleware.Auth())
+	for _, f := range installsIam {
+		f(r)
+	}
 }

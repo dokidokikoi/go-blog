@@ -9,9 +9,9 @@ import (
 )
 
 type dataCenter struct {
-	pg    *postgres.Store
-	redis *redis.Store
-	mongo *mongo.Store
+	pg       *postgres.Store
+	redisCli *redis.Store
+	mongo    *mongo.Store
 }
 
 var (
@@ -88,8 +88,8 @@ func GetStoreDBFactory() (store.Factory, error) {
 		}
 
 		datacFactory = &dataCenter{
-			pg:    pg,
-			redis: redisCli,
+			pg:       pg,
+			redisCli: redisCli,
 		}
 	})
 

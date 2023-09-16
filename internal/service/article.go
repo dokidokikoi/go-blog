@@ -18,6 +18,7 @@ type ArticleSrv interface {
 	ListByWhereNode(ctx context.Context, example *article.Article, node *meta.WhereNode, option *meta.ListOption) ([]*article.Article, int64, error)
 
 	DeleteArticleAllTags(ctx context.Context, articleID uint) error
+	ListTagArticle(ctx context.Context, tagID uint, option *meta.ListOption) ([]*article.Article, int64, error)
 }
 
 type articleSrv struct {
@@ -66,6 +67,28 @@ func (as *articleSrv) ListByWhereNode(ctx context.Context, example *article.Arti
 
 func (as *articleSrv) DeleteArticleAllTags(ctx context.Context, articleID uint) error {
 	return as.store.ArticleTag().Delete(ctx, &article.ArticleTag{ArticleID: articleID}, nil)
+}
+
+func (as *articleSrv) ListTagArticle(ctx context.Context, tagID uint, option *meta.ListOption) ([]*article.Article, int64, error) {
+	articleTags, err := as.store.ArticleTag().List(ctx, &article.ArticleTag{TagID: tagID}, &meta.ListOption{PageSize: 1000})
+	if err != nil {
+		return nil, 0, err
+	}
+	articleIDs := []uint{}
+	for _, at := range articleTags {
+		articleIDs = append(articleIDs, at.ArticleID)
+	}
+	node := &meta.WhereNode{
+		Conditions: []*meta.Condition{
+			{
+				Field:    "id",
+				Operator: meta.IN,
+				Value:    articleIDs,
+			},
+		},
+	}
+	articles, err := as.store.Article().ListComplex(ctx, nil, node, option)
+	return articles, int64(len(articleTags)), err
 }
 
 func newArticleSrv(store store.Factory) ArticleSrv {
