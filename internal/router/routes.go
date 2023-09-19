@@ -12,6 +12,7 @@ var installs []installFunc
 var installsIam []installFunc
 
 func InstallAll(r *gin.Engine) {
+	r.Use(middleware.Cors())
 	for _, f := range installs {
 		f(r)
 	}

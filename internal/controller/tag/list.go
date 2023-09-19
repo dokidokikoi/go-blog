@@ -14,12 +14,13 @@ import (
 
 func (c *Controller) List(ctx *gin.Context) {
 	var query Query
-	if ctx.ShouldBindJSON(&query) != nil {
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		zaplog.L().Error("", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
 		return
 	}
 
-	listOption := &meta.ListOption{}
+	listOption := &meta.ListOption{PageSize: 1000}
 	var (
 		list    []*tag.Tag
 		total   int64

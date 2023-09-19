@@ -12,7 +12,7 @@ func installArticle(e *gin.Engine) {
 	articlesController := article.NewController(storeFactory)
 	articlesR := e.Group("/articles")
 	{
-		articlesR.GET("", articlesController.List)
+		articlesR.POST("/list", articlesController.List)
 		articlesR.GET("/:id", articlesController.Get)
 		articlesR.GET("/tag/:id", articlesController.ListTagArticle)
 	}

@@ -22,7 +22,6 @@ type DelSeries struct {
 
 type Query struct {
 	Keyword string `form:"keyword"`
-	Type    int8   `form:"type" binding:"required"`
 }
 
 type Controller struct {

@@ -47,9 +47,10 @@ type DelArticle struct {
 }
 
 type Query struct {
-	Keyword    string `form:"keyword"`
-	CategoryID uint   `form:"category_id"`
-	SeriesID   uint   `form:"series_id"`
+	Keyword    string `json:"keyword"`
+	CategoryID uint   `json:"category"`
+	SeriesID   uint   `json:"series"`
+	Tags       []uint `json:"tags"`
 }
 
 type Controller struct {

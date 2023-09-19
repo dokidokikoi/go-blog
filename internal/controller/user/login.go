@@ -7,6 +7,7 @@ import (
 	myErrors "go-blog/internal/errors"
 	"go-blog/internal/service"
 	"go-blog/pkg/captcha"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -89,7 +90,7 @@ func verifyCaptcha(srv service.Service, uuid, text string) bool {
 	// TODO: 根据uuid将验证码从redis拿出与用户对比
 	code, err := srv.User().GetCaptchCode(context.TODO(), uuid)
 	srv.User().DelCaptchCode(context.TODO(), uuid)
-	if err != nil || code != text {
+	if err != nil || strings.EqualFold(code, text) {
 		return false
 	}
 	return true

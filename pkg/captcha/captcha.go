@@ -14,7 +14,7 @@ import (
 
 func GetStandCaptcha() (text string, captcha string) {
 	text = generateRandomCode(4)
-	CaptchaBytes := GenCaptcha(200, 100, text)
+	CaptchaBytes := GenCaptcha(105, 38, text)
 	return text, fmt.Sprintf("data:image/png;base64,%s", base64.StdEncoding.EncodeToString(CaptchaBytes))
 }
 

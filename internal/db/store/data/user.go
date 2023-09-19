@@ -80,7 +80,7 @@ func (a users) GetCaptchCode(ctx context.Context, key string) (text string, err 
 }
 
 func (a users) DelCaptchCode(ctx context.Context, key string) error {
-	return a.DelCaptchCode(ctx, key)
+	return a.redisCli.User().DelCaptchCode(ctx, key)
 }
 
 func newUsers(d *dataCenter) store.Users {

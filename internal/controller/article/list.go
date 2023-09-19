@@ -16,8 +16,8 @@ import (
 
 func (c *Controller) List(ctx *gin.Context) {
 	var input Query
-	if ctx.ShouldBindQuery(&input) != nil {
-		zaplog.L().Error("参数校验失败")
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		zaplog.L().Error("参数校验失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, "")
 		return
 	}
@@ -36,6 +36,8 @@ func (c *Controller) List(ctx *gin.Context) {
 		err     error
 		example = &article.Article{CategoryID: input.CategoryID, SeriesID: input.SeriesID}
 	)
+	root := &meta.WhereNode{}
+	var nodes []*meta.WhereNode
 	if input.Keyword != "" {
 		node := &meta.WhereNode{
 			Conditions: []*meta.Condition{
@@ -46,10 +48,38 @@ func (c *Controller) List(ctx *gin.Context) {
 				},
 			},
 		}
-		items, total, err = c.srv.Article().ListByWhereNode(ctx, example, node, listOption)
-	} else {
-		items, total, err = c.srv.Article().List(ctx, example, listOption)
+		nodes = append(nodes, node)
 	}
+	if len(input.Tags) > 0 {
+		listOption.GetOption.Join = []*meta.Join{
+			{
+				Method:         meta.LEFT_JOIN,
+				Table:          "articles",
+				JoinTable:      "article_tag",
+				TableField:     "id",
+				JoinTableField: "article_id",
+			},
+		}
+		for _, id := range input.Tags {
+			node := &meta.WhereNode{
+				Conditions: []*meta.Condition{
+					{
+						Field:    "tag_id",
+						Operator: meta.EQUAL,
+						Value:    id,
+					},
+				},
+			}
+			nodes = append(nodes, node)
+		}
+	}
+	dummy := root
+	for _, node := range nodes {
+		dummy.Next = node
+		dummy = dummy.Next
+	}
+	items, total, err = c.srv.Article().ListByWhereNode(ctx, example, root, listOption)
+
 	if err != nil {
 		zaplog.L().Error("获取文章列表失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, "")

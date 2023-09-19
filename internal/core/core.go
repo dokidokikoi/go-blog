@@ -20,7 +20,7 @@ func WriteResponse(c *gin.Context, appError *errors.APPError, data interface{}) 
 		return
 	}
 
-	c.JSON(appError.StatusCode, Response{
+	c.JSON(http.StatusOK, Response{
 		Code:    appError.Code,
 		Message: appError.Message,
 		Data:    data,
@@ -36,7 +36,7 @@ func WriteListResponse(c *gin.Context, appError *errors.APPError, total int64, d
 		return
 	}
 
-	c.JSON(appError.StatusCode, Response{
+	c.JSON(http.StatusOK, Response{
 		Code:    appError.Code,
 		Message: appError.Message,
 		Data:    data,

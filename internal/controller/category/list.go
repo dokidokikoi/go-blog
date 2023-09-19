@@ -20,7 +20,7 @@ func (c *Controller) List(ctx *gin.Context) {
 		return
 	}
 
-	listOption := &meta.ListOption{}
+	listOption := &meta.ListOption{PageSize: 1000}
 	var (
 		list    []*category.Category
 		total   int64
