@@ -12,7 +12,7 @@ import (
 
 // 文章
 type Article struct {
-	ID            uint              `gorm:"primarykey"`
+	ID            uint              `json:"id" gorm:"primarykey"`
 	Title         string            `json:"title"`
 	Summary       string            `json:"summary"`
 	Cover         string            `json:"cover"`
@@ -24,7 +24,7 @@ type Article struct {
 	CategoryID    uint              `json:"category_id"`
 	Category      category.Category `json:"category" gorm:"foreignKey:CategoryID"`
 	Tags          []tag.Tag         `json:"tags" gorm:"many2many:article_tag"` //多对多关系.
-	SeriesID      uint              `json:"series_id"`
+	SeriesID      uint              `json:"series_id" gorm:"default:null"`
 	Series        series.Series     `json:"series" gorm:"foreignKey:SeriesID"`
 	AuthorID      uint              `json:"author_id"`
 	Author        user.User         `json:"author" gorm:"foreignKey:AuthorID"`

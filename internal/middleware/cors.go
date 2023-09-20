@@ -15,7 +15,7 @@ func Cors() func(ctx *gin.Context) {
 		ctx.Header("Access-Control-Allow-Origin", ctx.GetHeader("Origin"))
 		fmt.Println(ctx.GetHeader("Origin"))
 		// 必须，设置服务器支持的所有跨域请求的方法
-		ctx.Header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
+		ctx.Header("Access-Control-Allow-Methods", "POST, GET, PUT, PATCH, HEAD, DELETE, OPTIONS")
 		// 服务器支持的所有头信息字段，不限于浏览器在"预检"中请求的字段
 		ctx.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Token, Authorization")
 		// 可选，设置XMLHttpRequest的响应对象能拿到的额外字段

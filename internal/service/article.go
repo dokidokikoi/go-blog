@@ -18,6 +18,7 @@ type ArticleSrv interface {
 	ListByWhereNode(ctx context.Context, example *article.Article, node *meta.WhereNode, option *meta.ListOption) ([]*article.Article, int64, error)
 
 	DeleteArticleAllTags(ctx context.Context, articleID uint) error
+	CreateArticleTagsCollection(ctx context.Context, ats []*article.ArticleTag, option *meta.CreateCollectionOption) []error
 	ListTagArticle(ctx context.Context, tagID uint, option *meta.ListOption) ([]*article.Article, int64, error)
 }
 
@@ -89,6 +90,10 @@ func (as *articleSrv) ListTagArticle(ctx context.Context, tagID uint, option *me
 	}
 	articles, err := as.store.Article().ListComplex(ctx, nil, node, option)
 	return articles, int64(len(articleTags)), err
+}
+
+func (as *articleSrv) CreateArticleTagsCollection(ctx context.Context, ats []*article.ArticleTag, option *meta.CreateCollectionOption) []error {
+	return as.store.ArticleTag().CreateCollection(ctx, ats, option)
 }
 
 func newArticleSrv(store store.Factory) ArticleSrv {

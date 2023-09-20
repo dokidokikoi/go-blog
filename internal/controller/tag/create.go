@@ -19,7 +19,7 @@ func (c *Controller) Create(ctx *gin.Context) {
 		return
 	}
 	_, err := c.srv.Tag().Get(ctx, &tag.Tag{TagName: input.TagName, Type: int8(input.Type)}, nil)
-	if err != nil {
+	if err == nil {
 		core.WriteResponse(ctx, nil, nil)
 		return
 	}
