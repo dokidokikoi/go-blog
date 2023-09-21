@@ -19,6 +19,7 @@ type SiteSrv interface {
 
 	DeleteSiteAllTags(ctx context.Context, siteID uint) error
 	ListTagSite(ctx context.Context, tagID uint, option *meta.ListOption) ([]*site.Site, int64, error)
+	CreateSiteTagCollection(ctx context.Context, sts []*site.SiteTag, option *meta.CreateCollectionOption) []error
 }
 
 type siteSrv struct {
@@ -90,6 +91,10 @@ func (as *siteSrv) ListTagSite(ctx context.Context, tagID uint, option *meta.Lis
 
 	sites, err := as.store.Sites().ListComplex(ctx, nil, node, option)
 	return sites, int64(len(sites)), err
+}
+
+func (as *siteSrv) CreateSiteTagCollection(ctx context.Context, sts []*site.SiteTag, option *meta.CreateCollectionOption) []error {
+	return as.store.SiteTags().CreateCollection(ctx, sts, option)
 }
 
 func newSiteSrv(store store.Factory) SiteSrv {

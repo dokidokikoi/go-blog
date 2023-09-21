@@ -8,6 +8,7 @@ import (
 	"go-blog/internal/config"
 	"go-blog/internal/db/model/article"
 	"go-blog/internal/db/model/category"
+	"go-blog/internal/db/model/link"
 	"go-blog/internal/db/model/list"
 	"go-blog/internal/db/model/series"
 	"go-blog/internal/db/model/site"
@@ -176,6 +177,9 @@ func migrateDatabase(db *gorm.DB) error {
 	}
 	if err := db.AutoMigrate(&list.Item{}); err != nil {
 		return errors.Wrap(err, "migrate article items model failed")
+	}
+	if err := db.AutoMigrate(&link.Link{}); err != nil {
+		return errors.Wrap(err, "migrate article link model failed")
 	}
 
 	return nil

@@ -12,7 +12,7 @@ import (
 
 func (c *Controller) Update(ctx *gin.Context) {
 	var input UpdateArticle
-	if ctx.ShouldBindJSON(&input) != nil {
+	if err := ctx.ShouldBindJSON(&input); err != nil {
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
 		return
 	}
@@ -25,7 +25,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 		})
 	}
 
-	a, err := c.srv.Article().Get(ctx, &article.Article{ID: input.ID}, nil)
+	_, err := c.srv.Article().Get(ctx, &article.Article{ID: input.ID}, nil)
 	if err != nil {
 		zaplog.L().Error("文章不存在", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)
@@ -52,7 +52,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 		Weight:   input.Weight,
 		SeriesID: input.SeriesID,
 		ArticleBody: article.ArticleBody{
-			ID:      a.ArticleBodyID,
+			ID:      input.ArticleBodyID,
 			Content: input.ArticleBody,
 		},
 		CategoryID: input.CategoryID,

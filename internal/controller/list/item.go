@@ -8,11 +8,13 @@ import (
 
 type CreateItem struct {
 	ItemName       string    `json:"item_name" binding:"required"`
+	Cover          string    `json:"cover" binding:"required"`
 	Total          uint32    `json:"total" binding:"required"`
 	Progress       uint32    `json:"progress" binding:"required"`
 	Summary        string    `json:"summary" binding:"required"`
 	Company        string    `json:"company"`
 	Author         string    `json:"author"`
+	Rate           float32   `json:"rate"`
 	SerialNumber   string    `json:"serial_number"`
 	ProductionDate time.Time `json:"production_date"`
 	Type           int8      `json:"type" binding:"required"`
@@ -21,11 +23,13 @@ type CreateItem struct {
 type UpdateItem struct {
 	ID             uint      `json:"id" binding:"required"`
 	ItemName       string    `json:"item_name"`
+	Cover          string    `json:"cover"`
 	Total          uint32    `json:"total"`
 	Progress       uint32    `json:"progress"`
 	Summary        string    `json:"summary"`
 	Company        string    `json:"company"`
 	Author         string    `json:"author"`
+	Rate           float32   `json:"rate"`
 	SerialNumber   string    `json:"serial_number"`
 	ProductionDate time.Time `json:"production_date"`
 }

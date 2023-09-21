@@ -8,7 +8,7 @@ import (
 type CreateLink struct {
 	LinkName string `json:"link_name" binding:"required"`
 	Avatar   string `json:"avatar"`
-	Summary  string `json:"summary"`
+	Summary  string `json:"summary" binding:"required"`
 	Url      string `json:"url" binding:"required"`
 }
 

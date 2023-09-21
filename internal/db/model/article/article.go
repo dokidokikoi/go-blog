@@ -18,9 +18,9 @@ type Article struct {
 	Cover         string            `json:"cover"`
 	ViewCounts    uint              `json:"view_counts" gorm:"default:0"`
 	CommentCounts uint              `json:"comment_counts" gorm:"default:0"`
-	Weight        int               `json:"weight,omitempty" gorm:"default:0"`
+	Weight        int               `json:"weight" gorm:"default:1"`
 	ArticleBodyID uint              `json:"article_body_id"`
-	StatusCode    int               `json:"status_code,omitempty" gorm:"default:0"`
+	StatusCode    int               `json:"status_code,omitempty" gorm:"default:1"`
 	CategoryID    uint              `json:"category_id"`
 	Category      category.Category `json:"category" gorm:"foreignKey:CategoryID"`
 	Tags          []tag.Tag         `json:"tags" gorm:"many2many:article_tag"` //多对多关系.
@@ -29,9 +29,9 @@ type Article struct {
 	AuthorID      uint              `json:"author_id"`
 	Author        user.User         `json:"author" gorm:"foreignKey:AuthorID"`
 	ArticleBody   ArticleBody       `json:"article_body" gorm:"foreignKey:ArticleBodyID"`
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-	DeletedAt     gorm.DeletedAt `gorm:"index"`
+	CreatedAt     time.Time         `json:"created_at"`
+	UpdatedAt     time.Time         `json:"updated_at"`
+	DeletedAt     gorm.DeletedAt    `json:"deleted_at" gorm:"index"`
 }
 
 type ArticleBody struct {

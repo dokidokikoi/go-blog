@@ -20,11 +20,13 @@ func (c *Controller) Update(ctx *gin.Context) {
 	err := c.srv.Items().Update(ctx, &list.Item{
 		ID:             input.ID,
 		ItemName:       input.ItemName,
+		Cover:          input.Cover,
 		Summary:        input.Summary,
 		Total:          input.Total,
 		Progress:       input.Progress,
 		Company:        input.Company,
 		Author:         input.Author,
+		Rate:           input.Rate,
 		SerialNumber:   input.Summary,
 		ProductionDate: input.ProductionDate,
 	}, nil)

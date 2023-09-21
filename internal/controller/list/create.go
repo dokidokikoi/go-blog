@@ -12,7 +12,8 @@ import (
 
 func (c *Controller) Create(ctx *gin.Context) {
 	var input CreateItem
-	if ctx.ShouldBindJSON(&input) != nil {
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		zaplog.L().Error("", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrValidation, nil)
 		return
 	}
@@ -21,11 +22,13 @@ func (c *Controller) Create(ctx *gin.Context) {
 		ctx,
 		&list.Item{
 			ItemName:       input.ItemName,
+			Cover:          input.Cover,
 			Summary:        input.Summary,
 			Total:          input.Total,
 			Progress:       input.Progress,
 			Company:        input.Company,
 			Author:         input.Author,
+			Rate:           input.Rate,
 			SerialNumber:   input.Summary,
 			ProductionDate: input.ProductionDate,
 			Type:           input.Type,
