@@ -13,6 +13,7 @@ type User struct {
 	Avatar     string         `json:"avatar"`
 	Email      string         `json:"email" gorm:"unique"`
 	NickName   string         `json:"nick_name"`
+	Intro      string         `json:"intro"`
 	Password   string         `json:"-"`
 	StatusCode int            `json:"status_code" gorm:"fefault:0"`
 	LastLogin  time.Time      `json:"last_login"`

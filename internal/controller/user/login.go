@@ -7,6 +7,7 @@ import (
 	myErrors "go-blog/internal/errors"
 	"go-blog/internal/service"
 	"go-blog/pkg/captcha"
+	"strconv"
 	"strings"
 	"time"
 
@@ -52,19 +53,36 @@ func (c *Controller) Login(ctx *gin.Context) {
 		return
 	}
 
-	core.WriteResponse(ctx, nil, gin.H{"token": token})
+	c.srv.User().SetRedisKvExpire(ctx, strconv.Itoa(int(u.ID)), token, 364*60*60*24*time.Second)
+
+	core.WriteResponse(ctx, nil, gin.H{"token": token, "user_info": u})
 }
 
 func (c *Controller) GetCaptha(ctx *gin.Context) {
 	text, captcha := captcha.GetStandCaptcha()
 	uuid := uuid.New().String()
-	err := c.srv.User().SetCaptchaCode(ctx, uuid, text)
+	err := c.srv.User().SetRedisKvExpire(ctx, uuid, text, time.Minute)
 	if err != nil {
 		zaplog.L().Error("存入验证码失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiErrGenCaptcha, nil)
 		return
 	}
 	core.WriteResponse(ctx, nil, gin.H{"uuid": uuid, "captcha": captcha})
+}
+
+func (c *Controller) Logout(ctx *gin.Context) {
+	v, ok := ctx.Get("current_user")
+	if !ok {
+		core.WriteResponse(ctx, nil, nil)
+		return
+	}
+	u, ok := v.(*user.User)
+	if !ok {
+		core.WriteResponse(ctx, nil, nil)
+		return
+	}
+	c.srv.User().DelRedisKv(ctx, strconv.Itoa(int(u.ID)))
+	core.WriteResponse(ctx, nil, nil)
 }
 
 func GenerateToken(u *user.User) (string, error) {
@@ -87,10 +105,10 @@ func GenerateToken(u *user.User) (string, error) {
 }
 
 func verifyCaptcha(srv service.Service, uuid, text string) bool {
-	// TODO: 根据uuid将验证码从redis拿出与用户对比
-	code, err := srv.User().GetCaptchCode(context.TODO(), uuid)
-	srv.User().DelCaptchCode(context.TODO(), uuid)
-	if err != nil || strings.EqualFold(code, text) {
+	// 根据uuid将验证码从redis拿出与用户对比
+	code, err := srv.User().GetRedisKv(context.TODO(), uuid)
+	srv.User().DelRedisKv(context.TODO(), uuid)
+	if err != nil || !strings.EqualFold(code, text) {
 		return false
 	}
 	return true

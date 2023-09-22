@@ -4,6 +4,7 @@ import (
 	"errors"
 	"go-blog/internal/db/model/user"
 	"go-blog/internal/db/store/data"
+	"strconv"
 
 	"github.com/dokidokikoi/go-common/core"
 	myErrors "github.com/dokidokikoi/go-common/errors"
@@ -34,6 +35,18 @@ func Auth() func(ctx *gin.Context) {
 		user, err := store.Users().Get(ctx, &user.User{Email: claims.Emial}, nil)
 		if err != nil {
 			ctx.Abort()
+			return
+		}
+
+		token, err := store.Users().GetRedisKv(ctx, strconv.Itoa(int(user.ID)))
+		if err != nil {
+			ctx.Abort()
+			core.WriteResponse(ctx, myErrors.ApiErrTokenExpired, nil)
+			return
+		}
+		if token != tokenString {
+			ctx.Abort()
+			core.WriteResponse(ctx, myErrors.ApiErrTokenValidation, nil)
 			return
 		}
 

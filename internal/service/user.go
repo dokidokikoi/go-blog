@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go-blog/internal/db/model/user"
 	"go-blog/internal/db/store"
+	"time"
 
 	meta "github.com/dokidokikoi/go-common/meta/option"
 )
@@ -13,10 +14,11 @@ type UserSrv interface {
 	Create(ctx context.Context, u *user.User, option *meta.CreateOption) error
 	Get(ctx context.Context, u *user.User, option *meta.GetOption) (*user.User, error)
 	List(ctx context.Context, keyword string, option *meta.ListOption) ([]*user.User, int64, error)
+	Update(ctx context.Context, u *user.User, option *meta.UpdateOption) error
 
-	SetCaptchaCode(ctx context.Context, uuid, code string) error
-	GetCaptchCode(ctx context.Context, key string) (text string, code error)
-	DelCaptchCode(ctx context.Context, key string) error
+	SetRedisKvExpire(ctx context.Context, key, code string, expire time.Duration) error
+	GetRedisKv(ctx context.Context, key string) (text string, err error)
+	DelRedisKv(ctx context.Context, key string) error
 }
 
 type userSrv struct {
@@ -48,16 +50,19 @@ func (srv userSrv) List(ctx context.Context, keyword string, option *meta.ListOp
 	return result, count, err
 }
 
-func (srv userSrv) SetCaptchaCode(ctx context.Context, uuid, code string) error {
-	return srv.store.Users().SetCaptchCode(ctx, uuid, code)
+func (srv userSrv) SetRedisKvExpire(ctx context.Context, key, code string, expire time.Duration) error {
+	return srv.store.Users().SetRedisKvExpire(ctx, key, code, expire)
 }
 
-func (srv userSrv) GetCaptchCode(ctx context.Context, key string) (text string, code error) {
-	return srv.store.Users().GetCaptchCode(ctx, key)
+func (srv userSrv) GetRedisKv(ctx context.Context, key string) (text string, err error) {
+	return srv.store.Users().GetRedisKv(ctx, key)
+}
+func (srv userSrv) DelRedisKv(ctx context.Context, key string) error {
+	return srv.store.Users().DelRedisKv(ctx, key)
 }
 
-func (srv userSrv) DelCaptchCode(ctx context.Context, key string) error {
-	return srv.store.Users().DelCaptchCode(ctx, key)
+func (srv userSrv) Update(ctx context.Context, u *user.User, option *meta.UpdateOption) error {
+	return srv.store.Users().Update(ctx, u, option)
 }
 
 func newUserSrv(store store.Factory) UserSrv {

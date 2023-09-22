@@ -38,10 +38,11 @@ func (c *Controller) Create(ctx *gin.Context) {
 	err := c.srv.Comment().Create(
 		ctx,
 		&comment.Comment{
-			PID:       input.PID,
-			ArticleID: input.ArticleID,
-			Content:   input.Content,
-			Name:      input.Name,
+			PID:        input.PID,
+			ArticleID:  input.ArticleID,
+			Content:    input.Content,
+			Nickname:   input.Nickname,
+			ToNickname: input.ToNickname,
 		},
 		nil,
 	)

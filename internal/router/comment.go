@@ -14,6 +14,7 @@ func installComment(e *gin.Engine) {
 	{
 		commentsR.GET("", commentController.List)
 		commentsR.GET("/:id", commentController.Get)
+		commentsR.POST("", commentController.Create)
 	}
 }
 
@@ -22,7 +23,7 @@ func installCommentIam(e *gin.Engine) {
 	commentController := comment.NewController(storeFactory)
 	commentsR := e.Group("/comments")
 	{
-		commentsR.POST("", commentController.Create)
+		commentsR.PATCH("", commentController.Update)
 		commentsR.DELETE("", commentController.Del)
 	}
 }

@@ -20,6 +20,16 @@ type LoginParam struct {
 	Code     string `json:"code" binding:"required"`
 }
 
+type UpdateUser struct {
+	ID          uint   `json:"id"`
+	Avatar      string `json:"avatar"`
+	Email       string `json:"email"`
+	NickName    string `json:"nick_name"`
+	NewPassword string `json:"new_password"`
+	OldPassword string `json:"old_password"`
+	Intro       string `json:"intro"`
+}
+
 type Controller struct {
 	srv service.Service
 }

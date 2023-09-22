@@ -3,13 +3,14 @@ package store
 import (
 	"context"
 	"go-blog/internal/db/model/user"
+	"time"
 
 	"github.com/dokidokikoi/go-common/db/base"
 )
 
 type Users interface {
 	base.BasicCURD[user.User]
-	SetCaptchCode(ctx context.Context, key, code string) error
-	GetCaptchCode(ctx context.Context, key string) (text string, err error)
-	DelCaptchCode(ctx context.Context, key string) error
+	SetRedisKvExpire(ctx context.Context, key, code string, expire time.Duration) error
+	GetRedisKv(ctx context.Context, key string) (text string, err error)
+	DelRedisKv(ctx context.Context, key string) error
 }

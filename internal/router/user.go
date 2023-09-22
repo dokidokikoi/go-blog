@@ -24,6 +24,8 @@ func installUserIam(r *gin.Engine) {
 	{
 		userController := user.NewController(storeFactory)
 		usersR.GET("/:id", userController.Get)
+		usersR.PATCH("", userController.Update)
+		usersR.POST("/logout", userController.Logout)
 	}
 }
 

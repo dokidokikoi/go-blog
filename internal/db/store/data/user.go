@@ -6,6 +6,7 @@ import (
 	"go-blog/internal/db/store"
 	"go-blog/internal/db/store/data/postgres"
 	"go-blog/internal/db/store/data/redis"
+	"time"
 
 	meta "github.com/dokidokikoi/go-common/meta/option"
 )
@@ -71,16 +72,15 @@ func (a users) DeleteByIds(ctx context.Context, ids []uint) error {
 	return a.pg.Users().DeleteByIds(ctx, ids)
 }
 
-func (a users) SetCaptchCode(ctx context.Context, key, code string) error {
-	return a.redisCli.User().SetCaptchCode(ctx, key, code)
+func (a users) SetRedisKvExpire(ctx context.Context, key, code string, expire time.Duration) error {
+	return a.redisCli.User().SetRedisKvExpire(ctx, key, code, expire)
 }
 
-func (a users) GetCaptchCode(ctx context.Context, key string) (text string, err error) {
-	return a.redisCli.User().GetCaptchCode(ctx, key)
+func (a users) GetRedisKv(ctx context.Context, key string) (text string, err error) {
+	return a.redisCli.User().GetRedisKv(ctx, key)
 }
-
-func (a users) DelCaptchCode(ctx context.Context, key string) error {
-	return a.redisCli.User().DelCaptchCode(ctx, key)
+func (a users) DelRedisKv(ctx context.Context, key string) error {
+	return a.redisCli.User().DelRedisKv(ctx, key)
 }
 
 func newUsers(d *dataCenter) store.Users {

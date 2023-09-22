@@ -16,6 +16,8 @@ type CommentSrv interface {
 	DeleteCollection(ctx context.Context, examples []*comment.Comment, option *meta.DeleteCollectionOption) []error
 	List(ctx context.Context, example *comment.Comment, option *meta.ListOption) ([]*comment.Comment, int64, error)
 	ListByWhereNode(ctx context.Context, example *comment.Comment, node *meta.WhereNode, option *meta.ListOption) ([]*comment.Comment, int64, error)
+
+	SetCommentChildren(ctx context.Context, examples []*comment.Comment) []error
 }
 
 type commentSrv struct {
@@ -58,6 +60,42 @@ func (cs *commentSrv) ListByWhereNode(ctx context.Context, example *comment.Comm
 	}
 	list, err := cs.store.Comments().ListComplex(ctx, example, node, option)
 	return list, total, err
+}
+
+func (cs *commentSrv) SetCommentChildren(ctx context.Context, examples []*comment.Comment) []error {
+	var errs []error
+	for _, e := range examples {
+		if e == nil {
+			continue
+		}
+		var es []error
+		e.Children, es = cs.GetCommentChildren(ctx, e)
+		if es != nil {
+			errs = append(errs, es...)
+		}
+	}
+	return errs
+}
+
+func (cs commentSrv) GetCommentChildren(ctx context.Context, example *comment.Comment) ([]*comment.Comment, []error) {
+	if example == nil {
+		return nil, nil
+	}
+	option := &meta.ListOption{PageSize: 100, Page: 1}
+	children, _, err := cs.List(ctx, &comment.Comment{PID: example.ID}, option)
+	if err != nil {
+		return nil, []error{err}
+	}
+	var errs []error
+	for _, e := range children {
+		list, es := cs.GetCommentChildren(ctx, e)
+		if err != nil {
+			errs = append(errs, es...)
+			continue
+		}
+		children = append(children, list...)
+	}
+	return children, errs
 }
 
 func newCommentSrv(store store.Factory) CommentSrv {

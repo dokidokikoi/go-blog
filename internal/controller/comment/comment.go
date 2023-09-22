@@ -6,10 +6,16 @@ import (
 )
 
 type CreateComment struct {
-	ArticleID uint   `json:"article_id"`
-	PID       uint   `json:"pid"`
-	Content   string `json:"content" binding:"required"`
-	Name      string `json:"name" binding:"required"`
+	ArticleID  uint   `json:"article_id"`
+	PID        uint   `json:"pid"`
+	Content    string `json:"content" binding:"required"`
+	Nickname   string `json:"nickname" binding:"required"`
+	ToNickname string `json:"to_nickname"`
+}
+
+type UpdateComment struct {
+	ID     uint `json:"id" binding:"required"`
+	Weight int8 `json:"weight"`
 }
 
 type DelComment struct {
