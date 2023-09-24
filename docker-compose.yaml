@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  backend: 
+    image: blog-backend-image
+    volumes:
+      - ./internal/conf:/app/internal/conf
+    depends_on:
+      - blog-postgres
+      - blog-redis
+    restart: always
+    networks:
+      - go-blog-net
+  frontend:
+    image: blog-frontend-image
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./internal/conf:/app/conf
+    restart: always
+    ports:
+      - 443:443
+    networks:
+      - go-blog-net
+  blog-postgres:
+    image: postgres:latest
+    volumes:
+      - ./pg/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 1234567
+      POSTGRES_USER: go-blog
+      POSTGRES_DB: blog
+    networks:
+      - go-blog-net
+  blog-redis:
+    image: redis:latest
+    networks:
+      - go-blog-net
+networks:
+  go-blog-net:

@@ -15,6 +15,7 @@ func installUser(r *gin.Engine) {
 		usersR.POST("/register", userController.Register)
 		usersR.POST("/login", userController.Login)
 		usersR.POST("/captcha", userController.GetCaptha)
+		usersR.GET("/host", userController.Host)
 	}
 }
 

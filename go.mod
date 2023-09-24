@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/dokidokikoi/go-common v0.0.0-20230912095159-a1ebc80961f7
+	github.com/dokidokikoi/go-common v0.0.0-20230924114736-97b791174453
 	github.com/fogleman/gg v1.3.0
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.9.1

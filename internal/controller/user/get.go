@@ -21,7 +21,17 @@ func (c *Controller) Get(ctx *gin.Context) {
 
 	u, err := c.srv.User().Get(ctx, &user.User{ID: uint(userID)}, nil)
 	if err != nil {
-		zaplog.L().Error("获取分类信息失败", zap.Error(err))
+		zaplog.L().Error("获取用户信息失败", zap.Error(err))
+		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)
+		return
+	}
+	core.WriteResponse(ctx, nil, u)
+}
+
+func (c *Controller) Host(ctx *gin.Context) {
+	u, err := c.srv.User().Get(ctx, &user.User{ID: uint(1)}, nil)
+	if err != nil {
+		zaplog.L().Error("获取站长信息失败", zap.Error(err))
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)
 		return
 	}
