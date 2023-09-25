@@ -16,6 +16,7 @@ type ArticleSrv interface {
 	DeleteCollection(ctx context.Context, examples []*article.Article, option *meta.DeleteCollectionOption) []error
 	List(ctx context.Context, example *article.Article, option *meta.ListOption) ([]*article.Article, int64, error)
 	ListByWhereNode(ctx context.Context, example *article.Article, node *meta.WhereNode, option *meta.ListOption) ([]*article.Article, int64, error)
+	UpdateByWhereNode(ctx context.Context, example *article.Article, node *meta.WhereNode, option *meta.UpdateOption) error
 
 	DeleteArticleAllTags(ctx context.Context, articleID uint) error
 	CreateArticleTagsCollection(ctx context.Context, ats []*article.ArticleTag, option *meta.CreateCollectionOption) []error
@@ -64,6 +65,10 @@ func (as *articleSrv) ListByWhereNode(ctx context.Context, example *article.Arti
 
 	list, err := as.store.Article().ListComplex(ctx, example, node, option)
 	return list, total, err
+}
+
+func (as *articleSrv) UpdateByWhereNode(ctx context.Context, example *article.Article, node *meta.WhereNode, option *meta.UpdateOption) error {
+	return as.store.Article().UpdateByWhere(ctx, node, example, option)
 }
 
 func (as *articleSrv) DeleteArticleAllTags(ctx context.Context, articleID uint) error {

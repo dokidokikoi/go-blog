@@ -27,5 +27,28 @@ func (c *Controller) Get(ctx *gin.Context) {
 		core.WriteResponse(ctx, myErrors.ApiRecordNotFound, nil)
 		return
 	}
+	go func() {
+		cnt := 0
+		for cnt < 10 {
+			node := &meta.WhereNode{
+				Conditions: []*meta.Condition{
+					{
+						Field:    "view_counts",
+						Operator: meta.EQUAL,
+						Value:    s.ViewCounts,
+					},
+				},
+			}
+			err := c.srv.Article().UpdateByWhereNode(ctx, &article.Article{ID: s.ID, ViewCounts: s.ViewCounts + 1}, node, nil)
+			if err == nil {
+				return
+			}
+			s, err = c.srv.Article().Get(ctx, &article.Article{ID: s.ID}, nil)
+			if err != nil {
+				return
+			}
+			cnt++
+		}
+	}()
 	core.WriteResponse(ctx, nil, s)
 }

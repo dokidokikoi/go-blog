@@ -7,6 +7,7 @@ import (
 	myErrors "go-blog/internal/errors"
 
 	zaplog "github.com/dokidokikoi/go-common/log/zap"
+	meta "github.com/dokidokikoi/go-common/meta/option"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -51,5 +52,29 @@ func (c *Controller) Create(ctx *gin.Context) {
 		core.WriteResponse(ctx, myErrors.ApiErrDatabase, nil)
 		return
 	}
+
+	go func() {
+		cnt := 0
+		for cnt < 10 {
+			s, err := c.srv.Article().Get(ctx, &article.Article{ID: input.ArticleID}, nil)
+			if err != nil {
+				return
+			}
+			node := &meta.WhereNode{
+				Conditions: []*meta.Condition{
+					{
+						Field:    "comment_counts",
+						Operator: meta.EQUAL,
+						Value:    s.CommentCounts,
+					},
+				},
+			}
+			err = c.srv.Article().UpdateByWhereNode(ctx, &article.Article{ID: s.ID, CommentCounts: s.CommentCounts + 1}, node, nil)
+			if err == nil {
+				return
+			}
+			cnt++
+		}
+	}()
 	core.WriteResponse(ctx, nil, nil)
 }

@@ -24,6 +24,7 @@
 
 logs
 harukaze.top.crt
+harukaze.top_bundle.crt
 harukaze.top.key
 
 pg/
