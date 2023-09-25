@@ -5,7 +5,7 @@ FROM golang:alpine as build
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
-    GOARCH=arm64 \
+    GOARCH=amd64 \
     GOPROXY=https://goproxy.cn
 
 # 设置工作目录

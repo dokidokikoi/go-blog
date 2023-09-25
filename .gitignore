@@ -25,3 +25,6 @@
 logs
 harukaze.top.crt
 harukaze.top.key
+
+pg/
+.idea/
