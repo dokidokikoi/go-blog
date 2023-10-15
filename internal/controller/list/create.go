@@ -29,7 +29,7 @@ func (c *Controller) Create(ctx *gin.Context) {
 			Company:        input.Company,
 			Author:         input.Author,
 			Rate:           input.Rate,
-			SerialNumber:   input.Summary,
+			SerialNumber:   input.SerialNumber,
 			ProductionDate: input.ProductionDate,
 			Type:           input.Type,
 		},

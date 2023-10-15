@@ -27,7 +27,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 		Company:        input.Company,
 		Author:         input.Author,
 		Rate:           input.Rate,
-		SerialNumber:   input.Summary,
+		SerialNumber:   input.SerialNumber,
 		ProductionDate: input.ProductionDate,
 	}, nil)
 	if err != nil {
